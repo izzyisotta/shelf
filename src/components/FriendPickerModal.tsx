@@ -51,8 +51,8 @@ export default function FriendPickerModal({ isOpen, onClose, onSelect }: Props) 
                   onClick={() => onSelect(f.id, f.display_name || f.username)}
                   className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-surface-hover transition-colors flex items-center gap-3"
                 >
-                  <div className="w-8 h-8 rounded-full bg-coral-muted flex items-center justify-center flex-shrink-0">
-                    <span className="text-coral text-sm font-bold">
+                  <div className="w-8 h-8 rounded-full bg-accent-muted flex items-center justify-center flex-shrink-0">
+                    <span className="text-accent text-sm font-bold">
                       {(f.display_name || f.username).charAt(0).toUpperCase()}
                     </span>
                   </div>

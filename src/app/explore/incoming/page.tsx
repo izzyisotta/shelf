@@ -166,12 +166,12 @@ export default function IncomingPage() {
       <div className="bg-surface rounded-xl border border-border p-6 mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Incoming</h1>
+            <h1 className="font-serif text-2xl text-foreground">Incoming</h1>
             <p className="text-sm text-muted mt-1">Things that need your attention</p>
           </div>
           {totalPending > 0 && (
             <div className="text-center">
-              <div className="text-2xl font-bold text-coral">{totalPending}</div>
+              <div className="text-2xl font-mono font-semibold text-accent">{totalPending}</div>
               <div className="text-xs text-muted">pending</div>
             </div>
           )}
@@ -193,11 +193,11 @@ export default function IncomingPage() {
               <h2 className="text-sm font-medium text-muted uppercase tracking-wide mb-3">
                 Friend Recommendations
               </h2>
-              <div className="bg-surface rounded-xl border border-coral/30 p-4 space-y-3">
+              <div className="bg-surface rounded-xl border border-accent/30 p-4 space-y-3">
                 {pendingRecs.map((rec) => (
                   <div key={rec.id} className="flex items-center gap-4 py-2">
-                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-coral-muted flex items-center justify-center">
-                      <span className="text-coral text-xs font-bold uppercase">
+                    <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent-muted flex items-center justify-center">
+                      <span className="text-accent text-xs font-bold uppercase">
                         {categoryBadge(rec.category)}
                       </span>
                     </div>
@@ -206,13 +206,13 @@ export default function IncomingPage() {
                       <div className="flex items-center gap-2 mt-0.5">
                         {rec.creator && <span className="text-sm text-muted">{rec.creator}</span>}
                         {rec.creator && <span className="text-muted-light">·</span>}
-                        <span className="text-xs text-coral">{rec.source}</span>
+                        <span className="text-xs text-accent">{rec.source}</span>
                       </div>
                     </div>
                     <div className="flex gap-2">
                       <button
                         onClick={() => acceptRec(rec.id)}
-                        className="px-4 py-1.5 bg-coral text-white rounded-lg text-sm hover:bg-coral-hover"
+                        className="px-4 py-1.5 bg-accent text-background rounded-lg text-sm hover:bg-accent-hover"
                       >
                         Accept
                       </button>
@@ -240,11 +240,11 @@ export default function IncomingPage() {
                   <div
                     key={m.id}
                     onClick={() => router.push(`/item/${m.item.id}?friend=${m.author.id}`)}
-                    className="bg-surface rounded-xl border border-border p-4 hover:border-coral/30 transition-colors cursor-pointer"
+                    className="bg-surface rounded-xl border border-border p-4 hover:border-accent/30 transition-colors cursor-pointer"
                   >
                     <div className="flex items-start gap-3">
-                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-coral-muted flex items-center justify-center">
-                        <span className="text-coral text-xs font-bold">
+                      <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent-muted flex items-center justify-center">
+                        <span className="text-accent text-xs font-bold">
                           {(m.author.display_name || m.author.username)[0].toUpperCase()}
                         </span>
                       </div>
@@ -254,7 +254,7 @@ export default function IncomingPage() {
                             {m.author.display_name || m.author.username}
                           </span>
                           <span className="text-muted-light text-xs">messaged you about</span>
-                          <span className="text-coral text-sm font-medium">{m.item.title}</span>
+                          <span className="text-accent text-sm font-medium">{m.item.title}</span>
                           <span className="text-muted-light text-xs">{timeAgo(m.created_at)}</span>
                         </div>
                         <p className="text-sm text-muted mt-1 truncate">{m.body}</p>
@@ -279,7 +279,7 @@ export default function IncomingPage() {
                   return (
                     <div
                       key={i}
-                      className="group bg-surface rounded-xl border border-border p-4 hover:border-coral/30 transition-colors"
+                      className="group bg-surface rounded-xl border border-border p-4 hover:border-accent/30 transition-colors"
                     >
                       <div className="flex items-center gap-4">
                         <div
@@ -297,8 +297,8 @@ export default function IncomingPage() {
                               className="w-10 h-14 object-cover rounded flex-shrink-0"
                             />
                           ) : (
-                            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-coral-muted flex items-center justify-center">
-                              <span className="text-coral text-xs font-bold uppercase">
+                            <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent-muted flex items-center justify-center">
+                              <span className="text-accent text-xs font-bold uppercase">
                                 {categoryBadge(nudge.category)}
                               </span>
                             </div>
@@ -320,7 +320,7 @@ export default function IncomingPage() {
                             {nudge.creator && <span className="text-muted-light">·</span>}
                             <span className="text-xs text-muted-light capitalize">{nudge.category}</span>
                           </div>
-                          <p className="text-xs text-coral mt-1">{nudge.reason}</p>
+                          <p className="text-xs text-accent mt-1">{nudge.reason}</p>
                         </div>
                         <div className="flex-shrink-0 flex gap-1.5">
                           {status ? (
@@ -332,14 +332,14 @@ export default function IncomingPage() {
                               <button
                                 onClick={() => nudgeToTrove(nudge)}
                                 disabled={savingNudge === nudgeKey + ":trove"}
-                                className="px-3 py-1.5 text-xs text-coral hover:bg-coral hover:text-white rounded-lg transition-colors border border-coral/30 opacity-0 group-hover:opacity-100"
+                                className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
                               >
                                 + Trove
                               </button>
                               <button
                                 onClick={() => nudgeToUpNext(nudge)}
                                 disabled={savingNudge === nudgeKey + ":upnext"}
-                                className="px-3 py-1.5 text-xs text-coral hover:bg-coral hover:text-white rounded-lg transition-colors border border-coral/30 opacity-0 group-hover:opacity-100"
+                                className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
                               >
                                 + Up Next
                               </button>

@@ -39,7 +39,7 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <div className="bg-surface rounded-xl border border-border p-8 w-full max-w-md">
-        <h1 className="text-2xl font-bold text-foreground mb-6">Log in</h1>
+        <h1 className="font-serif text-2xl text-foreground mb-6">Log in</h1>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
@@ -49,7 +49,7 @@ export default function LoginPage() {
               value={login}
               onChange={(e) => setLogin(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-coral focus:border-transparent"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-accent focus:border-transparent"
             />
           </div>
           <div>
@@ -59,16 +59,16 @@ export default function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-coral focus:border-transparent"
+              className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-accent focus:border-transparent"
             />
           </div>
 
-          {error && <p className="text-coral text-sm">{error}</p>}
+          {error && <p className="text-accent text-sm">{error}</p>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-coral text-white rounded-lg font-medium hover:bg-coral-hover disabled:opacity-50 transition-colors"
+            className="w-full py-3 bg-accent text-background rounded-lg font-medium hover:bg-accent-hover disabled:opacity-50 transition-colors"
           >
             {loading ? "Logging in..." : "Log in"}
           </button>
@@ -76,7 +76,7 @@ export default function LoginPage() {
 
         <p className="mt-4 text-sm text-muted text-center">
           No account?{" "}
-          <Link href="/signup" className="text-coral hover:underline">
+          <Link href="/signup" className="text-accent hover:underline">
             Sign up
           </Link>
         </p>

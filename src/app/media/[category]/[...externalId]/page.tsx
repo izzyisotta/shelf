@@ -285,7 +285,7 @@ export default function MediaPage() {
           )}
 
           <div className="flex-1 min-w-0 pt-1">
-            <h1 className="text-xl font-bold text-foreground leading-tight">
+            <h1 className="font-serif text-xl text-foreground leading-tight">
               {detail.title}
             </h1>
             {creatorLine && (
@@ -298,7 +298,7 @@ export default function MediaPage() {
             {/* Info line */}
             <div className="flex items-center gap-3 mt-2 text-xs text-muted-light">
               {detail.rating != null && detail.rating > 0 && (
-                <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-coral-muted text-coral font-medium">
+                <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent-muted text-accent font-medium">
                   ★ {detail.rating.toFixed(1)}
                 </span>
               )}
@@ -319,7 +319,7 @@ export default function MediaPage() {
                 {detail.genres.map((g) => (
                   <span
                     key={g}
-                    className="text-xs px-2 py-0.5 rounded-full bg-coral-muted text-coral"
+                    className="text-xs px-2 py-0.5 rounded-full bg-accent-muted text-accent"
                   >
                     {g}
                   </span>
@@ -339,7 +339,7 @@ export default function MediaPage() {
             {overviewLong && (
               <button
                 onClick={() => setShowFullOverview(!showFullOverview)}
-                className="text-xs text-coral hover:text-coral-hover mt-1"
+                className="text-xs text-accent hover:text-accent-hover mt-1"
               >
                 {showFullOverview ? "Show less" : "Show more"}
               </button>
@@ -379,13 +379,13 @@ export default function MediaPage() {
         {social?.myItem ? (
           <div className="mb-3">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs px-3 py-1.5 rounded-full bg-coral text-white font-medium">
+              <span className="text-xs px-3 py-1.5 rounded-full bg-accent text-background font-medium">
                 In your Trove, ranked #{social.myItem.rank}
               </span>
             </div>
             <button
               onClick={() => router.push(`/item/${social.myItem!.id}`)}
-              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-surface-hover text-muted hover:bg-coral hover:text-white border border-border hover:border-coral transition-all"
+              className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-surface-hover text-muted hover:bg-accent hover:text-background border border-border hover:border-accent transition-all"
             >
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
@@ -404,7 +404,7 @@ export default function MediaPage() {
             <button
               onClick={addToConsumed}
               disabled={adding}
-              className="px-4 py-2 bg-coral text-white rounded-lg text-sm font-medium hover:bg-coral-hover disabled:opacity-50 transition-colors"
+              className="px-4 py-2 bg-accent text-background rounded-lg text-sm font-medium hover:bg-accent-hover disabled:opacity-50 transition-colors"
             >
               {adding ? "Adding..." : "Add to Trove"}
             </button>
@@ -420,7 +420,7 @@ export default function MediaPage() {
 
         <button
           onClick={openRecommendModal}
-          className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-coral-muted text-coral hover:bg-coral hover:text-white transition-all"
+          className="flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg bg-accent-muted text-accent hover:bg-accent hover:text-background transition-all"
         >
           <svg
             width="14"
@@ -457,8 +457,8 @@ export default function MediaPage() {
                   className="flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-coral-muted flex items-center justify-center flex-shrink-0">
-                      <span className="text-coral text-sm font-bold">
+                    <div className="w-8 h-8 rounded-full bg-accent-muted flex items-center justify-center flex-shrink-0">
+                      <span className="text-accent text-sm font-bold">
                         {(
                           f.display_name || f.username
                         )[0].toUpperCase()}
@@ -479,7 +479,7 @@ export default function MediaPage() {
                         `/item/${f.item_id}?friend=${f.id}`
                       )
                     }
-                    className="text-xs px-2.5 py-1.5 rounded-lg bg-surface-hover text-muted hover:bg-coral hover:text-white border border-border hover:border-coral transition-all"
+                    className="text-xs px-2.5 py-1.5 rounded-lg bg-surface-hover text-muted hover:bg-accent hover:text-background border border-border hover:border-accent transition-all"
                   >
                     <svg
                       width="14"
@@ -519,8 +519,8 @@ export default function MediaPage() {
                   }
                   className="w-full text-left flex items-center gap-3 p-3 rounded-lg hover:bg-surface-hover transition-colors"
                 >
-                  <div className="w-8 h-8 rounded-full bg-coral-muted flex items-center justify-center flex-shrink-0">
-                    <span className="text-coral text-sm font-bold">
+                  <div className="w-8 h-8 rounded-full bg-accent-muted flex items-center justify-center flex-shrink-0">
+                    <span className="text-accent text-sm font-bold">
                       {(
                         c.friend.display_name || c.friend.username
                       )[0].toUpperCase()}
@@ -580,8 +580,8 @@ export default function MediaPage() {
                       }
                       className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-surface-hover transition-colors flex items-center gap-3"
                     >
-                      <div className="w-8 h-8 rounded-full bg-coral-muted flex items-center justify-center flex-shrink-0">
-                        <span className="text-coral text-sm font-bold">
+                      <div className="w-8 h-8 rounded-full bg-accent-muted flex items-center justify-center flex-shrink-0">
+                        <span className="text-accent text-sm font-bold">
                           {(
                             f.display_name || f.username
                           )
@@ -609,7 +609,7 @@ export default function MediaPage() {
 
       {/* Toast */}
       {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-coral/40 text-foreground text-sm px-4 py-2.5 rounded-xl shadow-lg z-50">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-accent/40 text-foreground text-sm px-4 py-2.5 rounded-xl shadow-lg z-50">
           {toast}
         </div>
       )}

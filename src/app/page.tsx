@@ -26,15 +26,18 @@ export default function Home() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center max-w-lg px-6">
-        <img src="/logo.svg" alt="Trove" className="h-14 mx-auto mb-4" />
-        <p className="text-lg text-muted mb-10">
-          Your taste, ranked. Your friends, compared.
+        <img src="/logo.svg" alt="Trove" className="h-14 mx-auto mb-8" />
+        <h1 className="font-serif text-3xl sm:text-4xl text-foreground mb-4 leading-tight">
+          Your taste, ranked.<br />Your friends, compared.
+        </h1>
+        <p className="text-muted mb-10">
+          Books, films and TV, kept where they belong.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/signup"
-            className="px-8 py-3 bg-coral text-white rounded-lg font-medium hover:bg-coral-hover transition-colors"
+            className="px-8 py-3 bg-accent text-background rounded-lg font-medium hover:bg-accent-hover transition-colors"
           >
             Get started
           </Link>

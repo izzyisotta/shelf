@@ -226,7 +226,7 @@ export default function DiscoverPage() {
               onClick={() => setSearchCategory(t.key)}
               className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                 searchCategory === t.key
-                  ? "bg-coral text-white"
+                  ? "bg-accent text-background"
                   : "bg-background text-muted border border-border hover:text-foreground"
               }`}
             >
@@ -257,7 +257,7 @@ export default function DiscoverPage() {
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               generating
                 ? "bg-surface-hover text-muted cursor-not-allowed"
-                : "bg-coral-muted text-coral hover:bg-coral hover:text-white"
+                : "bg-accent-muted text-accent hover:bg-accent hover:text-background"
             }`}
           >
             {generating ? "Generating..." : personalRec ? "Refresh" : "Generate"}
@@ -278,8 +278,8 @@ export default function DiscoverPage() {
                     key={i}
                     className="group flex items-center gap-4 py-3 px-3 rounded-lg hover:bg-surface-hover transition-colors"
                   >
-                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-coral-muted flex items-center justify-center">
-                      <span className="text-coral text-xs font-bold uppercase">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-muted flex items-center justify-center">
+                      <span className="text-accent text-xs font-bold uppercase">
                         {categoryBadge(pick.category)}
                       </span>
                     </div>
@@ -302,14 +302,14 @@ export default function DiscoverPage() {
                           <button
                             onClick={() => savePickToTrove(pick)}
                             disabled={savingPick === pickKey + ":trove"}
-                            className="px-3 py-1.5 text-xs text-coral hover:bg-coral hover:text-white rounded-lg transition-colors border border-coral/30 opacity-0 group-hover:opacity-100"
+                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
                           >
                             + Trove
                           </button>
                           <button
                             onClick={() => savePickToUpNext(pick)}
                             disabled={savingPick === pickKey + ":upnext"}
-                            className="px-3 py-1.5 text-xs text-coral hover:bg-coral hover:text-white rounded-lg transition-colors border border-coral/30 opacity-0 group-hover:opacity-100"
+                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
                           >
                             + Up Next
                           </button>
@@ -351,7 +351,7 @@ export default function DiscoverPage() {
               return (
                 <div
                   key={i}
-                  className="group bg-surface rounded-xl border border-border p-4 hover:border-coral/30 transition-colors"
+                  className="group bg-surface rounded-xl border border-border p-4 hover:border-accent/30 transition-colors"
                 >
                   <div className="flex items-center gap-4">
                     <div
@@ -369,8 +369,8 @@ export default function DiscoverPage() {
                           className="w-10 h-14 object-cover rounded flex-shrink-0"
                         />
                       ) : (
-                        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-coral-muted flex items-center justify-center">
-                          <span className="text-coral text-xs font-bold uppercase">
+                        <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent-muted flex items-center justify-center">
+                          <span className="text-accent text-xs font-bold uppercase">
                             {categoryBadge(item.category)}
                           </span>
                         </div>
@@ -411,14 +411,14 @@ export default function DiscoverPage() {
                           <button
                             onClick={() => saveActivityToTrove(item)}
                             disabled={savingActivity === actKey + ":trove"}
-                            className="px-3 py-1.5 text-xs text-coral hover:bg-coral hover:text-white rounded-lg transition-colors border border-coral/30 opacity-0 group-hover:opacity-100"
+                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
                           >
                             + Trove
                           </button>
                           <button
                             onClick={() => saveActivityToUpNext(item)}
                             disabled={savingActivity === actKey + ":upnext"}
-                            className="px-3 py-1.5 text-xs text-coral hover:bg-coral hover:text-white rounded-lg transition-colors border border-coral/30 opacity-0 group-hover:opacity-100"
+                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
                           >
                             + Up Next
                           </button>

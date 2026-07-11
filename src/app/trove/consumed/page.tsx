@@ -82,14 +82,14 @@ export default function ConsumedPage() {
       <div className="bg-surface rounded-xl border border-border p-6 mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">
+            <h1 className="text-2xl font-mono font-semibold text-foreground">
               @{user.username}
             </h1>
           </div>
           <div className="flex gap-6 text-center">
             {tabs.map((t) => (
               <div key={t.key}>
-                <div className="text-2xl font-bold text-foreground">{counts[t.key]}</div>
+                <div className="text-2xl font-mono font-semibold text-accent">{counts[t.key]}</div>
                 <div className="text-xs text-muted">{t.label}</div>
               </div>
             ))}
@@ -105,7 +105,7 @@ export default function ConsumedPage() {
             onClick={() => { setActiveTab(t.key); setAddMode(false); }}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === t.key
-                ? "bg-coral text-white"
+                ? "bg-accent text-background"
                 : "bg-surface text-muted hover:text-foreground border border-border"
             }`}
           >
@@ -120,7 +120,7 @@ export default function ConsumedPage() {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             addMode
               ? "bg-surface text-muted border border-border"
-              : "bg-coral-muted text-coral hover:bg-coral hover:text-white"
+              : "bg-accent-muted text-accent hover:bg-accent hover:text-background"
           }`}
         >
           {addMode ? "Done" : "+ Add"}
@@ -147,7 +147,7 @@ export default function ConsumedPage() {
       />
 
       {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-coral/40 text-foreground text-sm px-4 py-2.5 rounded-xl shadow-lg z-50">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-accent/40 text-foreground text-sm px-4 py-2.5 rounded-xl shadow-lg z-50">
           {toast}
         </div>
       )}

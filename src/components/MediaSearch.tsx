@@ -69,7 +69,7 @@ export default function MediaSearch({ category, onSelect }: Props) {
         onChange={(e) => setQuery(e.target.value)}
         onFocus={() => results.length > 0 && setShowResults(true)}
         placeholder={`Search for a ${categoryLabel}...`}
-        className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-coral focus:border-transparent"
+        className="w-full px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-accent focus:border-transparent"
       />
       {loading && (
         <div className="absolute right-3 top-2.5 text-muted text-sm">Searching...</div>

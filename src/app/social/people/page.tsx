@@ -74,7 +74,7 @@ export default function PeoplePage() {
 
   return (
     <div className="max-w-2xl mx-auto px-6 py-8">
-      <h1 className="text-2xl font-bold text-foreground mb-6">Friends</h1>
+      <h1 className="font-serif text-2xl text-foreground mb-6">Friends</h1>
 
       {/* Add friend */}
       <div className="bg-surface rounded-xl border border-border p-6 mb-6">
@@ -86,12 +86,12 @@ export default function PeoplePage() {
             onChange={(e) => setUsername(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && sendRequest()}
             placeholder="Enter their username"
-            className="flex-1 px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-coral focus:border-transparent"
+            className="flex-1 px-4 py-2 bg-background border border-border rounded-lg text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-accent focus:border-transparent"
           />
           <button
             onClick={sendRequest}
             disabled={!username.trim()}
-            className="px-6 py-2 bg-coral text-white rounded-lg font-medium hover:bg-coral-hover disabled:opacity-50"
+            className="px-6 py-2 bg-accent text-background rounded-lg font-medium hover:bg-accent-hover disabled:opacity-50"
           >
             Send
           </button>
@@ -117,7 +117,7 @@ export default function PeoplePage() {
                 <div className="flex gap-2">
                   <button
                     onClick={() => respondToRequest(req.friendship_id, "accept")}
-                    className="px-4 py-1.5 bg-coral text-white rounded-lg text-sm hover:bg-coral-hover"
+                    className="px-4 py-1.5 bg-accent text-background rounded-lg text-sm hover:bg-accent-hover"
                   >
                     Accept
                   </button>
@@ -169,7 +169,7 @@ export default function PeoplePage() {
                   <span className="font-medium text-foreground">{friend.display_name}</span>
                   <span className="text-muted text-sm ml-2">@{friend.username}</span>
                 </div>
-                <span className="text-coral text-sm font-medium">Compare tastes</span>
+                <span className="text-accent text-sm font-medium">Compare tastes</span>
               </Link>
             ))}
           </div>

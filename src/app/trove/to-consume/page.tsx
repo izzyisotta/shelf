@@ -116,7 +116,7 @@ export default function ToConsumePage() {
   }
 
   function sourceColor() {
-    return "text-coral";
+    return "text-accent";
   }
 
   const [editingNotes, setEditingNotes] = useState<string | null>(null);
@@ -144,13 +144,13 @@ export default function ToConsumePage() {
       <div className="bg-surface rounded-xl border border-border p-6 mb-6">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground">Up Next</h1>
+            <h1 className="font-serif text-2xl text-foreground">Up Next</h1>
             <p className="text-sm text-muted mt-1">Things to watch, read, and binge</p>
           </div>
           <div className="flex gap-6 text-center">
             {tabs.slice(1).map((t) => (
               <div key={t.key}>
-                <div className="text-2xl font-bold text-coral">{counts[t.key]}</div>
+                <div className="text-2xl font-mono font-semibold text-accent">{counts[t.key]}</div>
                 <div className="text-xs text-muted">{t.label}</div>
               </div>
             ))}
@@ -166,7 +166,7 @@ export default function ToConsumePage() {
             onClick={() => setActiveTab(t.key)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
               activeTab === t.key
-                ? "bg-coral text-white"
+                ? "bg-accent text-background"
                 : "bg-surface text-muted hover:text-foreground border border-border"
             }`}
           >
@@ -179,7 +179,7 @@ export default function ToConsumePage() {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             addMode
               ? "bg-surface text-muted border border-border"
-              : "bg-coral-muted text-coral hover:bg-coral hover:text-white"
+              : "bg-accent-muted text-accent hover:bg-accent hover:text-background"
           }`}
         >
           {addMode ? "Done" : "+ Add"}
@@ -196,7 +196,7 @@ export default function ToConsumePage() {
                 onClick={() => setAddCategory(t.key)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                   addCategory === t.key
-                    ? "bg-coral text-white"
+                    ? "bg-accent text-background"
                     : "bg-background text-muted border border-border hover:text-foreground"
                 }`}
               >
@@ -224,11 +224,11 @@ export default function ToConsumePage() {
           {filtered.map((item) => (
             <div
               key={item.id}
-              className="group bg-surface rounded-xl border border-border p-4 hover:border-coral/30 transition-colors"
+              className="group bg-surface rounded-xl border border-border p-4 hover:border-accent/30 transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-coral-muted flex items-center justify-center">
-                  <span className="text-coral text-xs font-bold uppercase">
+                <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent-muted flex items-center justify-center">
+                  <span className="text-accent text-xs font-bold uppercase">
                     {item.category === "book" ? "BK" : item.category === "film" ? "FM" : "TV"}
                   </span>
                 </div>
@@ -253,11 +253,11 @@ export default function ToConsumePage() {
                           }}
                           placeholder="Add a note..."
                           autoFocus
-                          className="text-sm px-2 py-0.5 bg-background border border-border rounded text-foreground placeholder:text-muted-light focus:ring-1 focus:ring-coral focus:border-transparent"
+                          className="text-sm px-2 py-0.5 bg-background border border-border rounded text-foreground placeholder:text-muted-light focus:ring-1 focus:ring-accent focus:border-transparent"
                         />
                         <button
                           onClick={() => saveNotes(item.id)}
-                          className="text-xs text-coral hover:text-coral-hover font-medium"
+                          className="text-xs text-accent hover:text-accent-hover font-medium"
                         >
                           Save
                         </button>
@@ -292,7 +292,7 @@ export default function ToConsumePage() {
                   <button
                     onClick={() => moveToTrove(item)}
                     disabled={movingToTrove === item.id}
-                    className="px-3 py-1.5 text-xs text-coral hover:bg-coral hover:text-white rounded-lg transition-colors border border-coral/30"
+                    className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30"
                   >
                     {movingToTrove === item.id ? "Moving..." : "→ Trove"}
                   </button>

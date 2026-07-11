@@ -268,19 +268,19 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
             onDragEnter={() => handleDragEnter(index)}
             onDragEnd={handleDragEnd}
             onDragOver={(e) => e.preventDefault()}
-            className={`group relative bg-surface rounded-xl border border-border overflow-hidden hover:border-coral/40 transition-all ${
+            className={`group relative bg-surface rounded-xl border border-border overflow-hidden hover:border-accent/40 transition-all ${
               editable && onReorder ? "cursor-grab active:cursor-grabbing" : ""
             } ${dragIndex === index ? "opacity-40 scale-95" : ""}`}
           >
-            <div className="absolute top-2 left-2 bg-coral text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center z-10">
+            <div className="absolute top-2 left-2 bg-accent text-background text-xs font-mono font-semibold w-6 h-6 rounded-full flex items-center justify-center z-10">
               {item.rank}
             </div>
             {editable && onDelete && (
               <button
                 onClick={(e) => { e.stopPropagation(); onDelete(item.id); }}
-                className="absolute top-2 right-2 bg-red-500 text-white text-xs w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                className="absolute top-2 right-2 bg-black/50 text-muted backdrop-blur-sm text-xs w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-60 hover:!opacity-100 hover:bg-red-500/80 hover:text-white transition-all z-10"
               >
-                x
+                &times;
               </button>
             )}
             {onAdd && (() => {
@@ -303,7 +303,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
               return (
                 <button
                   onClick={(e) => { e.stopPropagation(); onAdd(item); }}
-                  className="absolute top-2 right-2 text-xs font-medium px-2 py-1 rounded-lg z-10 transition-all bg-coral-muted text-coral hover:bg-coral hover:text-white opacity-0 group-hover:opacity-100"
+                  className="absolute top-2 right-2 text-xs font-medium px-2 py-1 rounded-lg z-10 transition-all bg-accent-muted text-accent hover:bg-accent hover:text-background opacity-0 group-hover:opacity-100"
                 >
                   + Up Next
                 </button>
@@ -335,7 +335,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
               <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={(e) => { e.stopPropagation(); openRecommendModal(item); }}
-                  className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium px-2 py-1.5 rounded-lg bg-coral-muted text-coral hover:bg-coral hover:text-white transition-all"
+                  className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium px-2 py-1.5 rounded-lg bg-accent-muted text-accent hover:bg-accent hover:text-background transition-all"
                   title="Recommend"
                 >
                   <RecommendIcon />
@@ -343,7 +343,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); openMessageModal(item); }}
-                  className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium px-2 py-1.5 rounded-lg bg-surface-hover text-muted hover:bg-coral hover:text-white border border-border hover:border-coral transition-all"
+                  className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium px-2 py-1.5 rounded-lg bg-surface-hover text-muted hover:bg-accent hover:text-background border border-border hover:border-accent transition-all"
                   title="Chat"
                 >
                   <ChatIcon />
@@ -369,7 +369,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
                   <div className="flex gap-2">
                     <button
                       onClick={pivotToChat}
-                      className="flex-1 px-4 py-2.5 bg-coral text-white rounded-lg text-sm font-medium hover:bg-coral-hover transition-colors"
+                      className="flex-1 px-4 py-2.5 bg-accent text-background rounded-lg text-sm font-medium hover:bg-accent-hover transition-colors"
                     >
                       Chat about it
                     </button>
@@ -402,8 +402,8 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
                           onClick={() => selectRecommendFriend(f.id, f.display_name || f.username)}
                           className="w-full text-left px-3 py-2.5 rounded-lg hover:bg-surface-hover transition-colors flex items-center gap-3"
                         >
-                          <div className="w-8 h-8 rounded-full bg-coral-muted flex items-center justify-center flex-shrink-0">
-                            <span className="text-coral text-sm font-bold">
+                          <div className="w-8 h-8 rounded-full bg-accent-muted flex items-center justify-center flex-shrink-0">
+                            <span className="text-accent text-sm font-bold">
                               {(f.display_name || f.username).charAt(0).toUpperCase()}
                             </span>
                           </div>
@@ -443,7 +443,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
                 <div>
                   <h3 className="font-semibold text-foreground">{messageItem.title}</h3>
                   {messageItem.creator && <p className="text-sm text-muted">{messageItem.creator}</p>}
-                  <p className="text-sm text-coral font-medium">Ranked #{messageItem.rank}</p>
+                  <p className="text-sm text-accent font-medium">Ranked #{messageItem.rank}</p>
                 </div>
               </div>
 
@@ -484,8 +484,8 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
                       onClick={() => toggleRecipient(f.id)}
                       className={`text-xs px-2.5 py-1 rounded-full border transition-all ${
                         selectedRecipients.includes(f.id)
-                          ? "bg-coral text-white border-coral"
-                          : "bg-surface-hover text-muted border-border hover:border-coral/40"
+                          ? "bg-accent text-background border-accent"
+                          : "bg-surface-hover text-muted border-border hover:border-accent/40"
                       }`}
                     >
                       {f.display_name || f.username}
@@ -500,18 +500,18 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
                     onChange={(e) => setNewMessage(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && sendMessage()}
                     placeholder="Write a message..."
-                    className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-coral focus:border-transparent"
+                    className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-accent focus:border-transparent"
                   />
                   <button
                     onClick={sendMessage}
                     disabled={!newMessage.trim() || selectedRecipients.length === 0 || sending}
-                    className="px-4 py-2 bg-coral text-white rounded-lg text-sm hover:bg-coral-hover disabled:opacity-50"
+                    className="px-4 py-2 bg-accent text-background rounded-lg text-sm hover:bg-accent-hover disabled:opacity-50"
                   >
                     Send
                   </button>
                 </div>
                 {selectedRecipients.length === 0 && newMessage.trim() && (
-                  <p className="text-xs text-coral mt-1">Select friends to send to</p>
+                  <p className="text-xs text-accent mt-1">Select friends to send to</p>
                 )}
               </div>
 
@@ -522,7 +522,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
                     setMessageItem(null);
                     router.push(`/item/${id}`);
                   }}
-                  className="flex-1 py-2 text-sm text-coral hover:text-coral-hover font-medium"
+                  className="flex-1 py-2 text-sm text-accent hover:text-accent-hover font-medium"
                 >
                   View full thread
                 </button>
@@ -540,7 +540,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
 
       {/* Toast */}
       {recommendToast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-coral/40 text-foreground text-sm px-4 py-2.5 rounded-xl shadow-lg z-50">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-accent/40 text-foreground text-sm px-4 py-2.5 rounded-xl shadow-lg z-50">
           {recommendToast}
         </div>
       )}

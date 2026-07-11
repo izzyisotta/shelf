@@ -49,7 +49,7 @@ export default function ConversationsPage() {
   return (
     <div className="max-w-5xl mx-auto px-6 py-8">
       <div className="bg-surface rounded-xl border border-border p-6 mb-6">
-        <h1 className="text-2xl font-bold text-foreground">Messages</h1>
+        <h1 className="font-serif text-2xl text-foreground">Messages</h1>
         <p className="text-sm text-muted mt-1">Your conversations about books, films, and shows</p>
       </div>
 
@@ -66,7 +66,7 @@ export default function ConversationsPage() {
             <div
               key={`${conv.item.id}-${conv.otherPerson.id}`}
               onClick={() => router.push(`/item/${conv.item.id}?friend=${conv.otherPerson.id}`)}
-              className="bg-surface rounded-xl border border-border p-4 hover:border-coral/30 transition-colors cursor-pointer"
+              className="bg-surface rounded-xl border border-border p-4 hover:border-accent/30 transition-colors cursor-pointer"
             >
               <div className="flex items-center gap-4">
                 {conv.item.cover_url ? (
@@ -76,8 +76,8 @@ export default function ConversationsPage() {
                     className="w-10 h-14 object-cover rounded flex-shrink-0"
                   />
                 ) : (
-                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-coral-muted flex items-center justify-center">
-                    <span className="text-coral text-xs font-bold uppercase">
+                  <div className="flex-shrink-0 w-10 h-10 rounded-lg bg-accent-muted flex items-center justify-center">
+                    <span className="text-accent text-xs font-bold uppercase">
                       {categoryBadge(conv.item.category)}
                     </span>
                   </div>
@@ -85,7 +85,7 @@ export default function ConversationsPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2">
                     <span className="font-medium text-foreground">{conv.item.title}</span>
-                    <span className="text-xs px-1.5 py-0.5 rounded bg-coral-muted text-coral font-medium uppercase">
+                    <span className="text-xs px-1.5 py-0.5 rounded bg-accent-muted text-accent font-medium uppercase">
                       {categoryBadge(conv.item.category)}
                     </span>
                     <span className="text-xs text-muted-light">with {conv.otherPerson.display_name}</span>

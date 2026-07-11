@@ -30,7 +30,7 @@ export default function SubNav({ items, defaultHref }: Props) {
           href={item.href}
           className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
             isActive(item.href)
-              ? "bg-coral text-white"
+              ? "bg-accent text-background"
               : "bg-surface text-muted border border-border hover:text-foreground"
           }`}
         >

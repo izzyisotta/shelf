@@ -180,7 +180,7 @@ function ThreadContent() {
                 <h1 className="font-semibold text-lg text-foreground">{item.title}</h1>
                 {item.creator && <p className="text-sm text-muted">{item.creator}</p>}
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-xs px-2 py-0.5 rounded-full bg-coral-muted text-coral font-medium">
+                  <span className="text-xs px-2 py-0.5 rounded-full bg-accent-muted text-accent font-medium">
                     {categoryLabel}
                   </span>
                   <span className="text-xs text-muted-light">
@@ -207,13 +207,13 @@ function ThreadContent() {
                 const isMe = m.author.id === user.id;
                 return (
                   <div key={m.id} className={`flex gap-3 ${isMe ? "flex-row-reverse" : ""}`}>
-                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-coral-muted flex items-center justify-center">
-                      <span className="text-coral text-xs font-bold">
+                    <div className="flex-shrink-0 w-8 h-8 rounded-full bg-accent-muted flex items-center justify-center">
+                      <span className="text-accent text-xs font-bold">
                         {(m.author.display_name || m.author.username)[0].toUpperCase()}
                       </span>
                     </div>
                     <div className={`max-w-[75%] ${isMe ? "text-right" : ""}`}>
-                      <div className={`rounded-xl px-4 py-2.5 ${isMe ? "bg-coral text-white" : "bg-surface border border-border text-foreground"}`}>
+                      <div className={`rounded-xl px-4 py-2.5 ${isMe ? "bg-accent text-background" : "bg-surface border border-border text-foreground"}`}>
                         <p className="text-sm">{m.body}</p>
                       </div>
                       <div className={`flex items-center gap-2 mt-1 text-xs text-muted-light ${isMe ? "justify-end" : ""}`}>
@@ -234,7 +234,7 @@ function ThreadContent() {
             {friendId && friendProfile ? (
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xs text-muted-light">To:</span>
-                <span className="text-xs px-3 py-1.5 rounded-full bg-coral text-white border border-coral">
+                <span className="text-xs px-3 py-1.5 rounded-full bg-accent text-background border border-accent">
                   {friendProfile.display_name || friendProfile.username}
                 </span>
               </div>
@@ -246,8 +246,8 @@ function ThreadContent() {
                     onClick={() => toggleRecipient(f.id)}
                     className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
                       selectedRecipients.includes(f.id)
-                        ? "bg-coral text-white border-coral"
-                        : "bg-surface-hover text-muted border-border hover:border-coral/40"
+                        ? "bg-accent text-background border-accent"
+                        : "bg-surface-hover text-muted border-border hover:border-accent/40"
                     }`}
                   >
                     {f.display_name || f.username}
@@ -267,18 +267,18 @@ function ThreadContent() {
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
                 placeholder="Write a message..."
-                className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-coral focus:border-transparent"
+                className="flex-1 px-3 py-2 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-accent focus:border-transparent"
               />
               <button
                 onClick={sendMessage}
                 disabled={!newMessage.trim() || selectedRecipients.length === 0 || sending}
-                className="px-4 py-2 bg-coral text-white rounded-lg text-sm hover:bg-coral-hover disabled:opacity-50"
+                className="px-4 py-2 bg-accent text-background rounded-lg text-sm hover:bg-accent-hover disabled:opacity-50"
               >
                 Send
               </button>
             </div>
             {selectedRecipients.length === 0 && newMessage.trim() && (
-              <p className="text-xs text-coral mt-2">Select at least one friend to send to</p>
+              <p className="text-xs text-accent mt-2">Select at least one friend to send to</p>
             )}
           </div>
         </>

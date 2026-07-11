@@ -213,23 +213,23 @@ function CompareContent() {
       <div className="bg-surface rounded-xl border border-border p-6 mb-6">
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-foreground mb-2">
+            <h1 className="font-serif text-2xl text-foreground mb-2">
               {friendName}
             </h1>
             <div className="flex gap-6">
               <div className="text-center">
-                <div className="text-3xl font-bold text-coral">{data.stats.totalMatches}</div>
+                <div className="text-3xl font-mono font-semibold text-accent">{data.stats.totalMatches}</div>
                 <div className="text-xs text-muted">matches</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-coral">{data.stats.theirTotal}</div>
+                <div className="text-3xl font-mono font-semibold text-accent">{data.stats.theirTotal}</div>
                 <div className="text-xs text-muted">their items</div>
               </div>
             </div>
           </div>
           <button
             onClick={() => setShowSendRec(true)}
-            className="px-4 py-2 bg-coral-muted text-coral rounded-lg text-sm font-medium hover:bg-coral hover:text-white transition-colors"
+            className="px-4 py-2 bg-accent-muted text-accent rounded-lg text-sm font-medium hover:bg-accent hover:text-background transition-colors"
           >
             Send recommendation to {friendName}
           </button>
@@ -241,7 +241,7 @@ function CompareContent() {
         <button
           onClick={() => setActiveTab("matches")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            activeTab === "matches" ? "bg-coral text-white" : "bg-surface text-muted border border-border hover:text-foreground"
+            activeTab === "matches" ? "bg-accent text-background" : "bg-surface text-muted border border-border hover:text-foreground"
           }`}
         >
           Matches
@@ -249,7 +249,7 @@ function CompareContent() {
         <button
           onClick={() => setActiveTab("shelf")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            activeTab === "shelf" ? "bg-coral text-white" : "bg-surface text-muted border border-border hover:text-foreground"
+            activeTab === "shelf" ? "bg-accent text-background" : "bg-surface text-muted border border-border hover:text-foreground"
           }`}
         >
           {friendName}&apos;s Trove
@@ -257,7 +257,7 @@ function CompareContent() {
         <button
           onClick={() => setActiveTab("recs")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-            activeTab === "recs" ? "bg-coral text-white" : "bg-surface text-muted border border-border hover:text-foreground"
+            activeTab === "recs" ? "bg-accent text-background" : "bg-surface text-muted border border-border hover:text-foreground"
           }`}
         >
           AI Recommendations
@@ -280,7 +280,7 @@ function CompareContent() {
                       }
                     }}
                   >
-                    <div className="text-lg font-bold text-coral w-8">#{i + 1}</div>
+                    <div className="text-lg font-bold text-accent w-8">#{i + 1}</div>
                     {m.coverUrl ? (
                       <img src={m.coverUrl} alt="" className="w-10 h-14 object-cover rounded" />
                     ) : (
@@ -295,7 +295,7 @@ function CompareContent() {
                       </div>
                     </div>
                     {i === 0 && (
-                      <span className="px-3 py-1 bg-coral-muted text-coral text-xs font-medium rounded-full">
+                      <span className="px-3 py-1 bg-accent-muted text-accent text-xs font-medium rounded-full">
                         Closest match
                       </span>
                     )}
@@ -323,7 +323,7 @@ function CompareContent() {
                   onClick={() => setShelfCategory(key)}
                   className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                     shelfCategory === key
-                      ? "bg-coral text-white"
+                      ? "bg-accent text-background"
                       : "bg-surface text-muted border border-border hover:text-foreground"
                   }`}
                 >
@@ -356,7 +356,7 @@ function CompareContent() {
             <button
               onClick={generateRecommendation}
               disabled={loadingRec}
-              className="px-4 py-2 bg-coral text-white rounded-lg text-sm font-medium hover:bg-coral-hover disabled:opacity-50 transition-colors"
+              className="px-4 py-2 bg-accent text-background rounded-lg text-sm font-medium hover:bg-accent-hover disabled:opacity-50 transition-colors"
             >
               {loadingRec ? "Analysing..." : recommendation ? "Refresh" : "Get recommendations"}
             </button>
@@ -378,7 +378,7 @@ function CompareContent() {
             <div className="space-y-4">
               {/* Vibe */}
               {recommendation.vibe && (
-                <div className="bg-surface rounded-xl border border-coral/30 p-5">
+                <div className="bg-surface rounded-xl border border-accent/30 p-5">
                   <p className="text-foreground text-lg font-medium italic">&ldquo;{recommendation.vibe}&rdquo;</p>
                 </div>
               )}
@@ -387,7 +387,7 @@ function CompareContent() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {recommendation.common_ground.length > 0 && (
                   <div className="bg-surface rounded-xl border border-border p-5">
-                    <h3 className="text-sm font-semibold text-coral uppercase tracking-wider mb-3">Common ground</h3>
+                    <h3 className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Common ground</h3>
                     <ul className="space-y-2">
                       {recommendation.common_ground.map((point, i) => (
                         <li key={i} className="text-sm text-foreground leading-relaxed">{point}</li>
@@ -397,7 +397,7 @@ function CompareContent() {
                 )}
                 {recommendation.differences.length > 0 && (
                   <div className="bg-surface rounded-xl border border-border p-5">
-                    <h3 className="text-sm font-semibold text-coral uppercase tracking-wider mb-3">Where you diverge</h3>
+                    <h3 className="text-sm font-semibold text-accent uppercase tracking-wider mb-3">Where you diverge</h3>
                     <ul className="space-y-2">
                       {recommendation.differences.map((point, i) => (
                         <li key={i} className="text-sm text-foreground leading-relaxed">{point}</li>
@@ -410,7 +410,7 @@ function CompareContent() {
               {/* From their list */}
               {recommendation.from_their_list.length > 0 && (
                 <div className="bg-surface rounded-xl border border-border p-5">
-                  <h3 className="text-sm font-semibold text-coral uppercase tracking-wider mb-4">
+                  <h3 className="text-sm font-semibold text-accent uppercase tracking-wider mb-4">
                     Try from {friendName}&apos;s trove
                   </h3>
                   <div className="space-y-3">
@@ -420,7 +420,7 @@ function CompareContent() {
                       const added = addedItems.has(key);
                       return (
                         <div key={i} className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-coral-muted text-coral text-xs font-bold flex items-center justify-center mt-0.5">
+                          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-accent-muted text-accent text-xs font-bold flex items-center justify-center mt-0.5">
                             {i + 1}
                           </div>
                           <div className="flex-1">
@@ -444,14 +444,14 @@ function CompareContent() {
                                 <button
                                   onClick={() => addToTrove(pick.title, pick.category, "")}
                                   disabled={savingRec === key + ":trove"}
-                                  className="px-3 py-1 rounded-lg text-xs font-medium transition-colors bg-coral-muted text-coral hover:bg-coral hover:text-white"
+                                  className="px-3 py-1 rounded-lg text-xs font-medium transition-colors bg-accent-muted text-accent hover:bg-accent hover:text-background"
                                 >
                                   + Trove
                                 </button>
                                 <button
                                   onClick={() => addToUpNext(pick.title, pick.category, "")}
                                   disabled={savingRec === key + ":upnext"}
-                                  className="px-3 py-1 rounded-lg text-xs font-medium transition-colors bg-coral-muted text-coral hover:bg-coral hover:text-white"
+                                  className="px-3 py-1 rounded-lg text-xs font-medium transition-colors bg-accent-muted text-accent hover:bg-accent hover:text-background"
                                 >
                                   + Up Next
                                 </button>
@@ -468,7 +468,7 @@ function CompareContent() {
               {/* New picks */}
               {recommendation.new_picks.length > 0 && (
                 <div className="bg-surface rounded-xl border border-border p-5">
-                  <h3 className="text-sm font-semibold text-coral uppercase tracking-wider mb-4">
+                  <h3 className="text-sm font-semibold text-accent uppercase tracking-wider mb-4">
                     New for both of you
                   </h3>
                   <div className="space-y-3">
@@ -478,7 +478,7 @@ function CompareContent() {
                       const added = addedItems.has(key);
                       return (
                         <div key={i} className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-coral-muted text-coral text-xs font-bold flex items-center justify-center mt-0.5">
+                          <div className="flex-shrink-0 w-6 h-6 rounded-full bg-accent-muted text-accent text-xs font-bold flex items-center justify-center mt-0.5">
                             {i + 1}
                           </div>
                           <div className="flex-1">
@@ -503,14 +503,14 @@ function CompareContent() {
                                 <button
                                   onClick={() => addToTrove(pick.title, pick.category, pick.creator || "")}
                                   disabled={savingRec === key + ":trove"}
-                                  className="px-3 py-1 rounded-lg text-xs font-medium transition-colors bg-coral-muted text-coral hover:bg-coral hover:text-white"
+                                  className="px-3 py-1 rounded-lg text-xs font-medium transition-colors bg-accent-muted text-accent hover:bg-accent hover:text-background"
                                 >
                                   + Trove
                                 </button>
                                 <button
                                   onClick={() => addToUpNext(pick.title, pick.category, pick.creator || "")}
                                   disabled={savingRec === key + ":upnext"}
-                                  className="px-3 py-1 rounded-lg text-xs font-medium transition-colors bg-coral-muted text-coral hover:bg-coral hover:text-white"
+                                  className="px-3 py-1 rounded-lg text-xs font-medium transition-colors bg-accent-muted text-accent hover:bg-accent hover:text-background"
                                 >
                                   + Up Next
                                 </button>
@@ -542,7 +542,7 @@ function CompareContent() {
                     onClick={() => setSendCategory(key)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
                       sendCategory === key
-                        ? "bg-coral text-white"
+                        ? "bg-accent text-background"
                         : "bg-background text-muted border border-border hover:text-foreground"
                     }`}
                   >
@@ -568,7 +568,7 @@ function CompareContent() {
       )}
 
       {toast && (
-        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-coral/40 text-foreground text-sm px-4 py-2.5 rounded-xl shadow-lg z-50">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 bg-surface border border-accent/40 text-foreground text-sm px-4 py-2.5 rounded-xl shadow-lg z-50">
           {toast}
         </div>
       )}
