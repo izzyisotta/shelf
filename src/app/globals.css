@@ -2,11 +2,24 @@
 
 /*
   Trove design tokens.
-  Voice: literary x command-line. Warm ink background, aged-paper text,
-  gold accent (a trove holds things of value). Serif for headings (Fraunces),
-  sans for UI (Geist), mono for ranks/handles/counts (Geist Mono).
+  Colors live in a non-inline @theme so utilities reference CSS variables,
+  which lets the [data-theme] blocks below swap the whole palette at
+  runtime (?theme=paper / ?theme=modern via ThemeParam). Candidate themes
+  for Isabella's design decision; the default is the gold/ink first pass.
 */
+
+/* Fonts must stay inline (they reference next/font variables) */
 @theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-serif: var(--font-display);
+}
+
+:root {
+  --font-display: var(--font-fraunces);
+}
+
+@theme {
   --color-background: #100e0c;
   --color-foreground: #efeae1;
   --color-accent: #d9a648;
@@ -17,9 +30,35 @@
   --color-border: #322c24;
   --color-muted: #a2988a;
   --color-muted-light: #6e6558;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --font-serif: var(--font-fraunces);
+}
+
+/* Candidate B: "paper" - light literary print, oxblood accent */
+:root[data-theme="paper"] {
+  --color-background: #faf7f0;
+  --color-foreground: #211c15;
+  --color-accent: #8c2f2f;
+  --color-accent-hover: #a63a3a;
+  --color-accent-muted: #8c2f2f1a;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f3eee3;
+  --color-border: #e3dccb;
+  --color-muted: #6f6759;
+  --color-muted-light: #a29a8a;
+}
+
+/* Candidate C: "modern" - cool dark, electric accent, no serif */
+:root[data-theme="modern"] {
+  --color-background: #0e0f12;
+  --color-foreground: #f0f1f3;
+  --color-accent: #7c8cff;
+  --color-accent-hover: #93a1ff;
+  --color-accent-muted: #7c8cff21;
+  --color-surface: #16181d;
+  --color-surface-hover: #1e2128;
+  --color-border: #2a2e37;
+  --color-muted: #9aa0ab;
+  --color-muted-light: #62676f;
+  --font-display: var(--font-geist-sans);
 }
 
 body {
@@ -29,5 +68,5 @@ body {
 }
 
 ::selection {
-  background: #d9a64840;
+  background: var(--color-accent-muted);
 }

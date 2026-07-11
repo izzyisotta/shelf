@@ -4,6 +4,7 @@ import { useAuth } from "@/components/AuthContext";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import Link from "next/link";
+import Logo from "@/components/Logo";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -26,7 +27,7 @@ export default function Home() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
       <div className="text-center max-w-lg px-6">
-        <img src="/logo.svg" alt="Trove" className="h-14 mx-auto mb-8" />
+        <Logo className="h-14 w-auto mx-auto mb-8" />
         <h1 className="font-serif text-3xl sm:text-4xl text-foreground mb-4 leading-tight">
           Your taste, ranked.<br />Your friends, compared.
         </h1>

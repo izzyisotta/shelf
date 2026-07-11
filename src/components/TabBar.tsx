@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "./AuthContext";
+import Logo from "./Logo";
 
 function TroveIcon() {
   return (
@@ -66,7 +67,7 @@ export default function TabBar() {
       <nav className="hidden md:flex bg-surface border-b border-border px-6 py-3 items-center justify-between">
         <div className="flex items-center gap-6">
           <Link href="/trove" className="hover:opacity-80 transition-opacity">
-            <img src="/logo.svg" alt="Trove" className="h-8" />
+            <Logo className="h-8 w-auto" />
           </Link>
           {tabs.map((tab) => (
             <Link
@@ -96,7 +97,7 @@ export default function TabBar() {
       {/* Mobile: slim top bar */}
       <nav className="md:hidden bg-surface border-b border-border px-4 py-3 flex items-center justify-between">
         <Link href="/trove" className="hover:opacity-80 transition-opacity">
-          <img src="/logo.svg" alt="Trove" className="h-7" />
+          <Logo className="h-7 w-auto" />
         </Link>
         <div className="flex items-center gap-3">
           <span className="text-sm font-mono text-muted-light">@{user.username}</span>
