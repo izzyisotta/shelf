@@ -23,6 +23,19 @@ const fraunces = Fraunces({
 export const metadata: Metadata = {
   title: "Trove",
   description: "Share your favorite books, films, and TV shows with friends",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Trove",
+  },
+  icons: {
+    apple: "/apple-touch-icon.png",
+  },
+};
+
+export const viewport = {
+  themeColor: "#100E0C",
 };
 
 export default function RootLayout({

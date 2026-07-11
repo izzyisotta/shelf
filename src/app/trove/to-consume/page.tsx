@@ -68,6 +68,23 @@ export default function ToConsumePage() {
 
   async function moveToTrove(item: RecommendedItem) {
     setMovingToTrove(item.id);
+
+    // Queue rows don't carry cover/external_id; look the item up so the
+    // Trove card arrives with full metadata
+    let enriched: { year?: string; coverUrl?: string; externalId?: string } = {};
+    try {
+      const searchRes = await fetch(
+        `/api/search-media?q=${encodeURIComponent(item.title)}&category=${item.category}`
+      );
+      const searchData = await searchRes.json();
+      const best = (searchData.results || [])[0];
+      if (best && best.title.toLowerCase() === item.title.toLowerCase()) {
+        enriched = { year: best.year, coverUrl: best.coverUrl, externalId: best.externalId };
+      }
+    } catch {
+      // Move proceeds without metadata rather than failing
+    }
+
     const res = await fetch("/api/items", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -75,6 +92,7 @@ export default function ToConsumePage() {
         category: item.category,
         title: item.title,
         creator: item.creator,
+        ...enriched,
       }),
     });
     if (res.ok) {
