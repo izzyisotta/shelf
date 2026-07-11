@@ -91,6 +91,19 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Category and title required" }, { status: 400 });
   }
 
+  // Pipeline direction: something already in your Trove can't go back into Up Next
+  const { data: existing } = await supabase
+    .from("items")
+    .select("id")
+    .eq("user_id", user.id)
+    .eq("category", category)
+    .ilike("title", title)
+    .limit(1);
+
+  if (existing && existing.length > 0) {
+    return NextResponse.json({ error: "Already in your Trove" }, { status: 409 });
+  }
+
   const { data: item, error } = await supabase
     .from("recommended")
     .insert({

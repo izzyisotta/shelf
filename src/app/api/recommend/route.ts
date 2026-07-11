@@ -73,7 +73,7 @@ Return a JSON object with exactly this structure. No markdown, no emojis, just c
   ]
 }
 
-Return 3-5 items in from_their_list and 3-5 in new_picks. Use their actual names. Return ONLY valid JSON, no other text.`;
+Return 3-5 items in from_their_list and 3-5 in new_picks, spread across the categories they both have items in (don't return all-films if they also share books or TV). Use their actual names. Return ONLY valid JSON, no other text.`;
 
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {

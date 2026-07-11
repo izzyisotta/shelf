@@ -63,6 +63,15 @@ export async function POST(req: NextRequest) {
     .single();
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // Pipeline direction: landing in the Trove clears the item from Up Next
+  await supabase
+    .from("recommended")
+    .delete()
+    .eq("user_id", user.id)
+    .eq("category", category)
+    .ilike("title", title);
+
   return NextResponse.json({ ok: true, item });
 }
 
@@ -95,6 +104,34 @@ export async function DELETE(req: NextRequest) {
   const { id } = await req.json();
   if (!id) return NextResponse.json({ error: "Item id required" }, { status: 400 });
 
+  const { data: deleted } = await supabase
+    .from("items")
+    .select("category")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .single();
+
   await supabase.from("items").delete().eq("id", id).eq("user_id", user.id);
+
+  // Compact ranks so the remaining items stay 1..n with no gaps
+  if (deleted?.category) {
+    const { data: remaining } = await supabase
+      .from("items")
+      .select("id, rank")
+      .eq("user_id", user.id)
+      .eq("category", deleted.category)
+      .order("rank", { ascending: true });
+
+    for (let i = 0; i < (remaining?.length || 0); i++) {
+      if (remaining![i].rank !== i + 1) {
+        await supabase
+          .from("items")
+          .update({ rank: i + 1 })
+          .eq("id", remaining![i].id)
+          .eq("user_id", user.id);
+      }
+    }
+  }
+
   return NextResponse.json({ ok: true });
 }

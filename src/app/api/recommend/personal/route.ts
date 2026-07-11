@@ -72,7 +72,7 @@ Return a JSON object with exactly this structure. No markdown, no emojis, just c
   ]
 }
 
-Return 8-10 picks spread across categories. Return ONLY valid JSON, no other text.`;
+Return 3-4 picks for EACH category the person has ranked items in (book/film/tv), so every populated category gets its own recommendations. Skip categories they have no items in. Return ONLY valid JSON, no other text.`;
 
   try {
     const res = await fetch("https://api.anthropic.com/v1/messages", {

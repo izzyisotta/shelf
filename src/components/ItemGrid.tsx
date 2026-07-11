@@ -268,7 +268,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
             onDragEnter={() => handleDragEnter(index)}
             onDragEnd={handleDragEnd}
             onDragOver={(e) => e.preventDefault()}
-            className={`group relative bg-surface rounded-xl border border-border overflow-hidden hover:border-accent/40 transition-all ${
+            className={`group relative flex flex-col bg-surface rounded-xl border border-border overflow-hidden hover:border-accent/40 transition-all ${
               editable && onReorder ? "cursor-grab active:cursor-grabbing" : ""
             } ${dragIndex === index ? "opacity-40 scale-95" : ""}`}
           >
@@ -310,7 +310,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
               );
             })()}
             <div
-              className={item.external_id ? "cursor-pointer" : ""}
+              className={`flex-1 ${item.external_id ? "cursor-pointer" : ""}`}
               onClick={() => {
                 if (item.external_id) {
                   router.push(`/media/${item.category}/${item.external_id}`);

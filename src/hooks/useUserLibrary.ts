@@ -86,6 +86,16 @@ export function useUserLibrary() {
       if (res.ok) {
         const data = await res.json();
         setTroveItems((prev) => [...prev, data.item]);
+        // Server clears the item from Up Next on arrival; mirror that locally
+        setUpNextItems((prev) =>
+          prev.filter(
+            (i) =>
+              !(
+                i.title.toLowerCase() === item.title.toLowerCase() &&
+                i.category === item.category
+              )
+          )
+        );
         return { ok: true };
       }
       const data = await res.json();

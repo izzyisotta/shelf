@@ -269,8 +269,16 @@ export default function DiscoverPage() {
         ) : personalRec ? (
           <>
             <p className="text-sm text-muted italic mb-4">{personalRec.taste_profile}</p>
+            {(["book", "film", "tv"] as const)
+              .map((cat) => ({ cat, picks: personalRec.picks.filter((p) => p.category === cat) }))
+              .filter((g) => g.picks.length > 0)
+              .map((group) => (
+            <div key={group.cat} className="mb-5 last:mb-0">
+              <h3 className="text-xs font-medium uppercase tracking-wide text-muted-light mb-1 px-3">
+                {group.cat === "book" ? "Books" : group.cat === "film" ? "Films" : "TV Shows"}
+              </h3>
             <div className="space-y-2">
-              {personalRec.picks.map((pick, i) => {
+              {group.picks.map((pick, i) => {
                 const status = library.statusLabel(pick.title, pick.category);
                 const pickKey = `${pick.title}|${pick.category}`;
                 return (
@@ -320,6 +328,8 @@ export default function DiscoverPage() {
                 );
               })}
             </div>
+            </div>
+              ))}
           </>
         ) : (
           <div className="text-center py-8 text-muted">
