@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
+import { insertionRank } from "@/lib/tiers";
 
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
@@ -30,22 +31,36 @@ export async function POST(req: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return NextResponse.json({ error: "Not logged in" }, { status: 401 });
 
-  const { category, title, creator, year, coverUrl, externalId } = await req.json();
+  const { category, title, creator, year, coverUrl, externalId, tier } = await req.json();
 
   if (!category || !title) {
     return NextResponse.json({ error: "Category and title required" }, { status: 400 });
   }
 
-  // Get max rank
-  const { data: maxItems } = await supabase
+  const { data: existingItems } = await supabase
     .from("items")
-    .select("rank")
+    .select("id, rank")
     .eq("user_id", user.id)
     .eq("category", category)
-    .order("rank", { ascending: false })
-    .limit(1);
+    .order("rank", { ascending: false });
 
-  const rank = (maxItems?.[0]?.rank || 0) + 1;
+  const count = existingItems?.length || 0;
+  let rank = count + 1;
+
+  // Tier-on-arrival: insert at the end of the chosen tier and shift
+  // everything below down one (tiers are rank-derived, see src/lib/tiers.ts)
+  if (tier === "five" || tier === "four" || tier === "library") {
+    rank = insertionRank(tier, count);
+    const toShift = (existingItems || []).filter((i) => i.rank >= rank);
+    // Descending order so no two rows ever hold the same rank mid-shift
+    for (const item of toShift) {
+      await supabase
+        .from("items")
+        .update({ rank: item.rank + 1 })
+        .eq("id", item.id)
+        .eq("user_id", user.id);
+    }
+  }
 
   const { data: item, error } = await supabase
     .from("items")

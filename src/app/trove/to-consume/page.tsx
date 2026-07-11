@@ -65,8 +65,10 @@ export default function ToConsumePage() {
   }
 
   const [movingToTrove, setMovingToTrove] = useState<string | null>(null);
+  const [choosingTier, setChoosingTier] = useState<string | null>(null);
 
-  async function moveToTrove(item: RecommendedItem) {
+  async function moveToTrove(item: RecommendedItem, tier: "five" | "four" | "library") {
+    setChoosingTier(null);
     setMovingToTrove(item.id);
 
     // Queue rows don't carry cover/external_id; look the item up so the
@@ -92,6 +94,7 @@ export default function ToConsumePage() {
         category: item.category,
         title: item.title,
         creator: item.creator,
+        tier,
         ...enriched,
       }),
     });
@@ -307,13 +310,34 @@ export default function ToConsumePage() {
                   </div>
                 </div>
                 <div className="flex gap-1 opacity-0 group-hover:opacity-100">
+                  {choosingTier === item.id ? (
+                    <>
+                      <span className="px-2 py-1.5 text-xs text-muted-light self-center">Rank it:</span>
+                      {([["five", "★★★★★"], ["four", "★★★★"], ["library", "Library"]] as const).map(([t, label]) => (
+                        <button
+                          key={t}
+                          onClick={() => moveToTrove(item, t)}
+                          className="px-3 py-1.5 text-xs font-mono text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30"
+                        >
+                          {label}
+                        </button>
+                      ))}
+                      <button
+                        onClick={() => setChoosingTier(null)}
+                        className="px-2 py-1.5 text-xs text-muted-light hover:text-foreground rounded-lg transition-colors"
+                      >
+                        ✕
+                      </button>
+                    </>
+                  ) : (
                   <button
-                    onClick={() => moveToTrove(item)}
+                    onClick={() => setChoosingTier(item.id)}
                     disabled={movingToTrove === item.id}
                     className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30"
                   >
                     {movingToTrove === item.id ? "Moving..." : "→ Trove"}
                   </button>
+                  )}
                   <button
                     onClick={() => removeItem(item.id, item.table)}
                     className="px-3 py-1.5 text-xs text-muted-light hover:text-red-400 hover:bg-red-400/10 rounded-lg transition-colors"

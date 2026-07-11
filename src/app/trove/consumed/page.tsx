@@ -149,6 +149,7 @@ export default function ConsumedPage() {
         items={items}
         category={activeTab}
         editable
+        tiered
         onDelete={deleteItem}
         onReorder={reorderItems}
       />

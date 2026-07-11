@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
   const theirItems = theirResult.data || [];
 
   const formatList = (items: { rank: number; category: string; title: string; creator: string }[]) =>
-    items.map((i) => `${i.rank}. [${i.category}] ${i.title}${i.creator ? ` by ${i.creator}` : ""}`).join("\n");
+    items.map((i) => `${i.rank}. [${i.category}] ${i.title}${i.creator ? ` by ${i.creator}` : ""}${i.rank <= 12 ? " (top-tier favourite)" : ""}`).join("\n");
 
   const prompt = `You're a cultural taste analyst. Two friends have shared their ranked favorite books, films, and TV shows. Analyze their taste and make recommendations.
 

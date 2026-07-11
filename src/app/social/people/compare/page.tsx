@@ -333,7 +333,7 @@ function CompareContent() {
             })}
           </div>
           {theirItems.filter((i) => i.category === shelfCategory).length > 0 ? (
-            <ItemGrid items={theirItems} category={shelfCategory} showComments viewingUserId={friendId!} onAdd={addFromShelf} addedItems={addedShelfItems} />
+            <ItemGrid items={theirItems} category={shelfCategory} tiered showComments viewingUserId={friendId!} onAdd={addFromShelf} addedItems={addedShelfItems} />
           ) : (
             <div className="text-center py-12 text-muted">
               <p>No {shelfCategory === "book" ? "books" : shelfCategory === "film" ? "films" : "TV shows"} yet.</p>

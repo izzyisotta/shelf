@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useUserLibrary } from "@/hooks/useUserLibrary";
 import { Item } from "@/types/item";
+import { TIER_BOUNDS, TIER_LABELS, TIER_DESCRIPTIONS } from "@/lib/tiers";
 
 interface Friend {
   id: string;
@@ -30,6 +31,7 @@ interface Props {
   onAdd?: (item: Item) => void;
   addedItems?: Set<string>;
   onRecommend?: (item: Item) => void;
+  tiered?: boolean;
 }
 
 // Inline SVG icons
@@ -54,7 +56,7 @@ function ChatIcon() {
   );
 }
 
-export default function ItemGrid({ items, category, editable = false, onDelete, onReorder, showComments = false, onAdd, addedItems, onRecommend }: Props) {
+export default function ItemGrid({ items, category, editable = false, onDelete, onReorder, showComments = false, onAdd, addedItems, onRecommend, tiered = false }: Props) {
   const router = useRouter();
   const library = useUserLibrary();
 
@@ -257,10 +259,28 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
     );
   }
 
+  const sections = tiered
+    ? [
+        { tier: "five" as const, start: 0, items: filtered.slice(0, TIER_BOUNDS.five) },
+        { tier: "four" as const, start: TIER_BOUNDS.five, items: filtered.slice(TIER_BOUNDS.five, TIER_BOUNDS.four) },
+        { tier: "library" as const, start: TIER_BOUNDS.four, items: filtered.slice(TIER_BOUNDS.four) },
+      ].filter((s) => s.items.length > 0)
+    : [{ tier: null, start: 0, items: filtered }];
+
   return (
     <div>
+      {sections.map((section) => (
+      <div key={section.tier ?? "all"} className="mb-8 last:mb-0">
+        {section.tier && (
+          <div className="flex items-baseline gap-2 mb-3">
+            <h3 className="text-sm font-mono text-accent tracking-wide">{TIER_LABELS[section.tier]}</h3>
+            <span className="text-xs text-muted-light">{TIER_DESCRIPTIONS[section.tier]}</span>
+          </div>
+        )}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-        {filtered.map((item, index) => (
+        {section.items.map((item, sectionIndex) => {
+          const index = section.start + sectionIndex;
+          return (
           <div
             key={item.id}
             draggable={editable && !!onReorder}
@@ -352,8 +372,11 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
               </div>
             </div>
           </div>
-        ))}
+          );
+        })}
       </div>
+      </div>
+      ))}
 
       {/* Recommend friend picker modal */}
       {recommendItem && !onRecommend && (
