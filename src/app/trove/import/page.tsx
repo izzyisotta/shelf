@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 type Category = "book" | "film" | "tv";
-type Mode = "letterboxd" | "goodreads" | "csv";
+type Mode = "letterboxd" | "goodreads" | "csv" | "paste";
 
 interface ParsedRow {
   title: string;
@@ -25,6 +25,7 @@ interface MatchedRow extends ParsedRow {
     externalId: string;
   } | null;
   selected: boolean;
+  rowCategory: Category;
 }
 
 // Minimal CSV parser that handles quoted fields with commas and escaped quotes
@@ -147,6 +148,7 @@ const MODES: { key: Mode; label: string; blurb: string; fixedCategory?: Category
   { key: "letterboxd", label: "Letterboxd", blurb: "ratings.csv, watched.csv or watchlist.csv from Settings > Import & Export", fixedCategory: "film" },
   { key: "goodreads", label: "Goodreads", blurb: "goodreads_library_export.csv from My Books > Import & Export", fixedCategory: "book" },
   { key: "csv", label: "Any CSV", blurb: "A spreadsheet with a title column; creator, year and rating picked up if present" },
+  { key: "paste", label: "Paste a list", blurb: "Any text: a notes-app list, a message thread, a blog post. AI pulls out the titles" },
 ];
 
 export default function ImportPage() {
@@ -156,6 +158,7 @@ export default function ImportPage() {
 
   const [mode, setMode] = useState<Mode | null>(null);
   const [category, setCategory] = useState<Category>("film");
+  const [pasteText, setPasteText] = useState("");
   const [matching, setMatching] = useState(false);
   const [matchProgress, setMatchProgress] = useState("");
   const [rows, setRows] = useState<MatchedRow[]>([]);
@@ -200,14 +203,75 @@ export default function ImportPage() {
         setError(data.error || "Matching failed");
       } else {
         setRows(
-          (data.matched || []).map((m: Omit<MatchedRow, "selected">) => ({
+          (data.matched || []).map((m: Omit<MatchedRow, "selected" | "rowCategory">) => ({
             ...m,
             selected: m.match !== null,
+            rowCategory: category,
           }))
         );
       }
     } catch {
       setError("Matching failed, try again");
+    }
+    setMatching(false);
+    setMatchProgress("");
+  }
+
+  async function handleExtract() {
+    setError("");
+    setResult(null);
+    setRows([]);
+    setMatching(true);
+    setMatchProgress("Extracting titles from your text...");
+    try {
+      const res = await fetch("/api/import/extract", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: pasteText }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Extraction failed");
+        setMatching(false);
+        setMatchProgress("");
+        return;
+      }
+      const extracted: { title: string; creator?: string; category: Category; rating?: number | null }[] =
+        data.items || [];
+      if (extracted.length === 0) {
+        setError("No books, films or TV shows found in that text");
+        setMatching(false);
+        setMatchProgress("");
+        return;
+      }
+
+      const allRows: MatchedRow[] = [];
+      for (const cat of ["book", "film", "tv"] as Category[]) {
+        const group = extracted.filter((i) => i.category === cat);
+        if (group.length === 0) continue;
+        setMatchProgress(`Matching ${group.length} ${cat === "tv" ? "TV shows" : cat + "s"}...`);
+        const matchRes = await fetch("/api/import/match", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            category: cat,
+            rows: group.map((i) => ({ title: i.title, creator: i.creator || "", rating: i.rating ?? null })),
+          }),
+        });
+        const matchData = await matchRes.json();
+        if (matchRes.ok) {
+          allRows.push(
+            ...(matchData.matched || []).map((m: Omit<MatchedRow, "selected" | "rowCategory">) => ({
+              ...m,
+              selected: m.match !== null,
+              rowCategory: cat,
+            }))
+          );
+        }
+      }
+      setRows(allRows);
+    } catch {
+      setError("Extraction failed, try again");
     }
     setMatching(false);
     setMatchProgress("");
@@ -219,29 +283,38 @@ export default function ImportPage() {
     setImporting(true);
     setError("");
     try {
-      const res = await fetch("/api/import/commit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          category,
-          items: selected.map((r) => ({
-            title: r.match!.title,
-            creator: r.match!.creator || r.creator || "",
-            year: r.match!.year || r.year || "",
-            coverUrl: r.match!.coverUrl,
-            externalId: r.match!.externalId,
-            rating: r.rating,
-            toUpNext: r.toUpNext || false,
-          })),
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || "Import failed");
-      } else {
-        setResult(data);
-        setRows([]);
+      const totals = { addedTrove: 0, addedUpNext: 0, skipped: 0 };
+      for (const cat of ["book", "film", "tv"] as Category[]) {
+        const group = selected.filter((r) => r.rowCategory === cat);
+        if (group.length === 0) continue;
+        const res = await fetch("/api/import/commit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            category: cat,
+            items: group.map((r) => ({
+              title: r.match!.title,
+              creator: r.match!.creator || r.creator || "",
+              year: r.match!.year || r.year || "",
+              coverUrl: r.match!.coverUrl,
+              externalId: r.match!.externalId,
+              rating: r.rating,
+              toUpNext: r.toUpNext || false,
+            })),
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          setError(data.error || "Import failed");
+          setImporting(false);
+          return;
+        }
+        totals.addedTrove += data.addedTrove;
+        totals.addedUpNext += data.addedUpNext;
+        totals.skipped += data.skipped;
       }
+      setResult(totals);
+      setRows([]);
     } catch {
       setError("Import failed, try again");
     }
@@ -261,7 +334,7 @@ export default function ImportPage() {
       </div>
 
       {/* Mode selection */}
-      <div className="grid sm:grid-cols-3 gap-3 mb-6">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {MODES.map((m) => (
           <button
             key={m.key}
@@ -284,7 +357,29 @@ export default function ImportPage() {
         ))}
       </div>
 
-      {mode && (
+      {mode === "paste" && (
+        <div className="bg-surface rounded-xl border border-border p-6 mb-6">
+          <textarea
+            value={pasteText}
+            onChange={(e) => setPasteText(e.target.value)}
+            placeholder={"Paste anything: \"my top films: parasite, the bear (tv), currently reading east of eden...\""}
+            rows={6}
+            className="w-full px-4 py-3 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-accent focus:border-transparent resize-y"
+          />
+          <div className="flex items-center gap-3 mt-3">
+            <button
+              onClick={handleExtract}
+              disabled={matching || pasteText.trim().length < 3}
+              className="px-4 py-2 bg-accent text-background rounded-lg text-sm font-medium hover:bg-accent-hover disabled:opacity-50 transition-colors"
+            >
+              {matching ? "Working..." : "Extract titles"}
+            </button>
+            {matchProgress && <span className="text-xs text-muted">{matchProgress}</span>}
+          </div>
+        </div>
+      )}
+
+      {mode && mode !== "paste" && (
         <div className="bg-surface rounded-xl border border-border p-6 mb-6">
           <div className="flex flex-wrap items-center gap-3">
             {/* Category picker: Letterboxd exports can be films or TV; generic CSV can be anything */}
@@ -381,6 +476,9 @@ export default function ImportPage() {
                 <div className="flex-1 min-w-0">
                   <div className="text-sm text-foreground truncate">
                     {r.match ? r.match.title : r.title}
+                    {mode === "paste" && (
+                      <span className="ml-2 text-xs font-mono uppercase text-muted-light">{r.rowCategory}</span>
+                    )}
                     {r.toUpNext && <span className="ml-2 text-xs text-muted-light">→ Up Next</span>}
                   </div>
                   <div className="text-xs text-muted truncate">
