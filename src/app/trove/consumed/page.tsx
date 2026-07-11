@@ -116,6 +116,13 @@ export default function ConsumedPage() {
         <div className="flex-1" />
 
         <button
+          onClick={() => router.push("/trove/import")}
+          className="px-4 py-2 rounded-lg text-sm font-medium bg-surface text-muted hover:text-foreground border border-border transition-colors"
+        >
+          Import
+        </button>
+
+        <button
           onClick={() => setAddMode(!addMode)}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             addMode
