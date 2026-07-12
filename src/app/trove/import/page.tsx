@@ -16,6 +16,22 @@ interface ParsedRow {
   toUpNext?: boolean;
 }
 
+interface SpeechRec {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((e: SpeechRecEvent) => void) | null;
+  onend: (() => void) | null;
+  onerror: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+}
+
+interface SpeechRecEvent {
+  resultIndex: number;
+  results: ArrayLike<ArrayLike<{ transcript: string }>>;
+}
+
 interface MatchedRow extends ParsedRow {
   match: {
     title: string;
@@ -160,6 +176,38 @@ export default function ImportPage() {
   const [category, setCategory] = useState<Category>("film");
   const [pasteText, setPasteText] = useState("");
   const [profileInput, setProfileInput] = useState("");
+  const [listening, setListening] = useState(false);
+  const recognitionRef = useRef<{ stop: () => void } | null>(null);
+
+  // C5 voice input: dictate a list instead of typing it. Uses the browser's
+  // built-in speech recognition where available (Chrome/Safari); the AI
+  // extraction step downstream is identical.
+  function toggleVoice() {
+    if (listening) {
+      recognitionRef.current?.stop();
+      setListening(false);
+      return;
+    }
+    const w = window as unknown as { SpeechRecognition?: new () => SpeechRec; webkitSpeechRecognition?: new () => SpeechRec };
+    const SR = w.SpeechRecognition || w.webkitSpeechRecognition;
+    if (!SR) return;
+    const rec = new SR();
+    rec.continuous = true;
+    rec.interimResults = false;
+    rec.lang = "en-GB";
+    rec.onresult = (e: SpeechRecEvent) => {
+      const text = Array.from(e.results)
+        .slice(e.resultIndex)
+        .map((r) => r[0].transcript)
+        .join(" ");
+      setPasteText((prev) => (prev ? prev + " " : "") + text.trim());
+    };
+    rec.onend = () => setListening(false);
+    rec.onerror = () => setListening(false);
+    recognitionRef.current = rec;
+    rec.start();
+    setListening(true);
+  }
   const [matching, setMatching] = useState(false);
   const [matchProgress, setMatchProgress] = useState("");
   const [rows, setRows] = useState<MatchedRow[]>([]);
@@ -409,6 +457,24 @@ export default function ImportPage() {
             >
               {matching ? "Working..." : "Extract titles"}
             </button>
+            {typeof window !== "undefined" &&
+              ("SpeechRecognition" in window || "webkitSpeechRecognition" in window) && (
+                <button
+                  onClick={toggleVoice}
+                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border transition-colors ${
+                    listening
+                      ? "border-accent text-accent"
+                      : "border-border text-muted hover:text-foreground"
+                  }`}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" />
+                    <path d="M19 10v2a7 7 0 0 1-14 0v-2" />
+                    <line x1="12" x2="12" y1="19" y2="22" />
+                  </svg>
+                  {listening ? "Listening... tap to stop" : "Speak your list"}
+                </button>
+              )}
             {matchProgress && <span className="text-xs text-muted">{matchProgress}</span>}
           </div>
         </div>
