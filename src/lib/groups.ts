@@ -2,7 +2,11 @@
 // instead of erroring. Postgres 42P01 = undefined_table.
 export function isMissingTable(error: { code?: string; message?: string } | null): boolean {
   if (!error) return false;
-  return error.code === "42P01" || /does not exist/i.test(error.message || "");
+  return (
+    error.code === "42P01" ||
+    error.code === "PGRST205" ||
+    /does not exist|could not find the table/i.test(error.message || "")
+  );
 }
 
 export const NEEDS_MIGRATION = {
