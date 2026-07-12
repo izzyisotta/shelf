@@ -51,9 +51,11 @@ as $$
   );
 $$;
 
--- Groups: members see them; anyone can create their own; creator deletes
+-- Groups: members see them (creator always - fixes the create-time RLS
+-- bootstrap where the creator isn't a member yet and INSERT..RETURNING fails);
+-- anyone can create their own; creator deletes
 create policy "Members can view their groups" on public.groups
-  for select using (public.is_group_member(id, auth.uid()));
+  for select using (created_by = auth.uid() or public.is_group_member(id, auth.uid()));
 create policy "Users can create groups" on public.groups
   for insert with check (auth.uid() = created_by);
 create policy "Creator can delete group" on public.groups
