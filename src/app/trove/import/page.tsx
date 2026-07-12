@@ -145,8 +145,8 @@ function parseRows(mode: Mode, csv: string[][]): { rows: ParsedRow[]; error?: st
 }
 
 const MODES: { key: Mode; label: string; blurb: string; fixedCategory?: Category }[] = [
-  { key: "letterboxd", label: "Letterboxd", blurb: "ratings.csv, watched.csv or watchlist.csv from Settings > Import & Export", fixedCategory: "film" },
-  { key: "goodreads", label: "Goodreads", blurb: "goodreads_library_export.csv from My Books > Import & Export", fixedCategory: "book" },
+  { key: "letterboxd", label: "Letterboxd", blurb: "Just your username - films and watchlist from your public profile. CSV as fallback", fixedCategory: "film" },
+  { key: "goodreads", label: "Goodreads", blurb: "Just your profile link - read and to-read shelves. CSV as fallback", fixedCategory: "book" },
   { key: "csv", label: "Any CSV", blurb: "A spreadsheet with a title column; creator, year and rating picked up if present" },
   { key: "paste", label: "Paste a list", blurb: "Any text: a notes-app list, a message thread, a blog post. AI pulls out the titles" },
 ];
@@ -159,6 +159,7 @@ export default function ImportPage() {
   const [mode, setMode] = useState<Mode | null>(null);
   const [category, setCategory] = useState<Category>("film");
   const [pasteText, setPasteText] = useState("");
+  const [profileInput, setProfileInput] = useState("");
   const [matching, setMatching] = useState(false);
   const [matchProgress, setMatchProgress] = useState("");
   const [rows, setRows] = useState<MatchedRow[]>([]);
@@ -190,13 +191,47 @@ export default function ImportPage() {
       return;
     }
 
+    await matchAndPreview(parsed.rows);
+  }
+
+  async function handleProfileFetch() {
+    setError("");
+    setResult(null);
+    setRows([]);
     setMatching(true);
-    setMatchProgress(`Matching ${parsed.rows.length} items against the ${category === "book" ? "book" : "film/TV"} database...`);
+    setMatchProgress(`Fetching ${mode === "letterboxd" ? "Letterboxd profile" : "Goodreads shelves"}...`);
+    try {
+      const res = await fetch("/api/import/profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ service: mode, username: profileInput }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setError(data.error || "Fetch failed");
+        setMatching(false);
+        setMatchProgress("");
+        return;
+      }
+      if (data.partial) {
+        setError("Got part of the profile before being rate-limited - import these, then fetch again in a few minutes for the rest.");
+      }
+      await matchAndPreview(data.rows);
+    } catch {
+      setError("Fetch failed, try again");
+      setMatching(false);
+      setMatchProgress("");
+    }
+  }
+
+  async function matchAndPreview(parsedRows: ParsedRow[]) {
+    setMatching(true);
+    setMatchProgress(`Matching ${parsedRows.length} items against the ${category === "book" ? "book" : "film/TV"} database...`);
     try {
       const res = await fetch("/api/import/match", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category, rows: parsed.rows }),
+        body: JSON.stringify({ category, rows: parsedRows }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -376,6 +411,31 @@ export default function ImportPage() {
             </button>
             {matchProgress && <span className="text-xs text-muted">{matchProgress}</span>}
           </div>
+        </div>
+      )}
+
+      {(mode === "letterboxd" || mode === "goodreads") && (
+        <div className="bg-surface rounded-xl border border-border p-6 mb-6">
+          <div className="flex flex-wrap items-center gap-3">
+            <input
+              type="text"
+              value={profileInput}
+              onChange={(e) => setProfileInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" && profileInput.trim()) handleProfileFetch(); }}
+              placeholder={mode === "letterboxd" ? "Letterboxd username" : "Goodreads profile URL or ID"}
+              className="flex-1 min-w-48 px-4 py-2 bg-background border border-border rounded-lg text-sm text-foreground placeholder:text-muted-light focus:ring-2 focus:ring-accent focus:border-transparent"
+            />
+            <button
+              onClick={handleProfileFetch}
+              disabled={matching || !profileInput.trim()}
+              className="px-4 py-2 bg-accent text-background rounded-lg text-sm font-medium hover:bg-accent-hover disabled:opacity-50 transition-colors"
+            >
+              {matching ? "Fetching..." : "Fetch profile"}
+            </button>
+          </div>
+          <p className="text-xs text-muted-light mt-2">
+            Public profiles only, no password needed. Private profile? Use the CSV upload below.
+          </p>
         </div>
       )}
 
