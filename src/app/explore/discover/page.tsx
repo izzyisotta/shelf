@@ -18,6 +18,26 @@ interface Pick {
 interface PersonalRec {
   taste_profile: string;
   picks: Pick[];
+  feedback?: Record<string, "up" | "down">;
+}
+
+function ThumbIcon({ down = false }: { down?: boolean }) {
+  return (
+    <svg
+      width="13"
+      height="13"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      style={down ? { transform: "rotate(180deg)" } : undefined}
+    >
+      <path d="M7 10v12" />
+      <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z" />
+    </svg>
+  );
 }
 
 interface ActivityItem {
@@ -114,6 +134,25 @@ export default function DiscoverPage() {
   function showToast(msg: string) {
     setToast(msg);
     setTimeout(() => setToast(null), 3000);
+  }
+
+  async function sendFeedback(pick: Pick, verdict: "up" | "down") {
+    const key = `${pick.title.toLowerCase()}|${pick.category}`;
+    const current = personalRec?.feedback?.[key];
+    const next = current === verdict ? "clear" : verdict;
+    // Optimistic local update
+    setPersonalRec((prev) => {
+      if (!prev) return prev;
+      const feedback = { ...(prev.feedback || {}) };
+      if (next === "clear") delete feedback[key];
+      else feedback[key] = next;
+      return { ...prev, feedback };
+    });
+    await fetch("/api/recommend/feedback", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title: pick.title, category: pick.category, verdict: next }),
+    });
   }
 
   async function savePickToUpNext(pick: Pick) {
@@ -317,7 +356,23 @@ export default function DiscoverPage() {
                       </div>
                       <p className="text-xs text-muted-light mt-0.5">{pick.reason}</p>
                     </div>
-                    <div className="flex-shrink-0 flex gap-1.5">
+                    <div className="flex-shrink-0 flex items-center gap-1.5">
+                      {(["up", "down"] as const).map((v) => {
+                        const fbKey = `${pick.title.toLowerCase()}|${pick.category}`;
+                        const active = personalRec.feedback?.[fbKey] === v;
+                        return (
+                          <button
+                            key={v}
+                            onClick={(e) => { e.stopPropagation(); sendFeedback(pick, v); }}
+                            title={v === "up" ? "More like this" : "Not for me"}
+                            className={`p-1.5 rounded-sm transition-colors ${
+                              active ? "text-accent" : "text-muted-light hover:text-foreground max-md:opacity-100 opacity-0 group-hover:opacity-100"
+                            }`}
+                          >
+                            <ThumbIcon down={v === "down"} />
+                          </button>
+                        );
+                      })}
                       {status ? (
                         <span className="px-3 py-1.5 text-xs text-muted-light bg-surface-hover rounded-lg border border-border">
                           {status}

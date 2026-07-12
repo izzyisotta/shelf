@@ -48,6 +48,16 @@ export async function POST() {
     .select("title, category")
     .eq("user_id", user.id);
 
+  // Prior thumbs feedback (E5): carried across regenerations and fed to the prompt
+  const { data: prior } = await supabase
+    .from("personal_recommendations")
+    .select("recommendation")
+    .eq("user_id", user.id)
+    .single();
+  const feedback: Record<string, "up" | "down"> = prior?.recommendation?.feedback || {};
+  const liked = Object.keys(feedback).filter((k) => feedback[k] === "up").map((k) => k.split("|")[0]);
+  const disliked = Object.keys(feedback).filter((k) => feedback[k] === "down").map((k) => k.split("|")[0]);
+
   const existingTitles = new Set([
     ...myItems.map((i) => `${i.title.toLowerCase()}|${i.category}`),
     ...(recommended || []).map((r) => `${(r.title as string).toLowerCase()}|${r.category}`),
@@ -63,6 +73,8 @@ ${formatList(myItems)}
 
 Items already on their list (do NOT suggest these):
 ${[...existingTitles].map((t) => t.split("|").join(" - ")).join(", ")}
+${liked.length > 0 ? `\nSuggestions they rated thumbs-UP before (more like these): ${liked.join(", ")}` : ""}
+${disliked.length > 0 ? `\nSuggestions they rated thumbs-DOWN before (never resuggest, avoid similar): ${disliked.join(", ")}` : ""}
 
 Return a JSON object with exactly this structure. No markdown, no emojis, just clean text. Be specific and reference actual titles from their list. Keep descriptions to 1-2 sentences.
 
@@ -106,6 +118,9 @@ Return 3-4 picks for EACH category the person has ranked items in (book/film/tv)
     if (Array.isArray(recommendation.picks) && recommendation.picks.length > 0) {
       recommendation.picks = await verifyPicks(recommendation.picks);
     }
+
+    // Feedback survives regeneration
+    if (Object.keys(feedback).length > 0) recommendation.feedback = feedback;
 
     // Upsert to database
     const { error: upsertError } = await supabase
