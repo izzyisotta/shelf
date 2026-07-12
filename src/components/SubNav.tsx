@@ -23,15 +23,15 @@ export default function SubNav({ items, defaultHref }: Props) {
   }
 
   return (
-    <div className="flex gap-2 px-6 pt-4 pb-2 max-w-5xl mx-auto">
+    <div className="flex gap-6 px-4 md:px-6 pt-4 max-w-5xl mx-auto border-b border-border">
       {items.map((item) => (
         <Link
           key={item.href}
           href={item.href}
-          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+          className={`pb-2 -mb-px text-xs font-medium uppercase tracking-widest transition-colors border-b-2 ${
             isActive(item.href)
-              ? "bg-accent text-background"
-              : "bg-surface text-muted border border-border hover:text-foreground"
+              ? "text-foreground border-accent"
+              : "text-muted border-transparent hover:text-foreground"
           }`}
         >
           {item.label}

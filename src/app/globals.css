@@ -20,6 +20,15 @@
 }
 
 @theme {
+  /* Editorial shape language (Isabella, 12 Jul): no pills, no soft blobs.
+     Sharp corners with a 2px whisper; radius utilities app-wide read these. */
+  --radius-sm: 1px;
+  --radius-md: 2px;
+  --radius-lg: 2px;
+  --radius-xl: 2px;
+  --radius-2xl: 3px;
+  --radius-3xl: 3px;
+
   --color-background: #100e0c;
   --color-foreground: #efeae1;
   --color-accent: #d9a648;

@@ -234,7 +234,7 @@ function ThreadContent() {
             {friendId && friendProfile ? (
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-xs text-muted-light">To:</span>
-                <span className="text-xs px-3 py-1.5 rounded-full bg-accent text-background border border-accent">
+                <span className="text-xs px-3 py-1.5 rounded-sm bg-accent text-background border border-accent">
                   {friendProfile.display_name || friendProfile.username}
                 </span>
               </div>
@@ -244,7 +244,7 @@ function ThreadContent() {
                   <button
                     key={f.id}
                     onClick={() => toggleRecipient(f.id)}
-                    className={`text-xs px-3 py-1.5 rounded-full border transition-all ${
+                    className={`text-xs px-3 py-1.5 rounded-sm border transition-all ${
                       selectedRecipients.includes(f.id)
                         ? "bg-accent text-background border-accent"
                         : "bg-surface-hover text-muted border-border hover:border-accent/40"

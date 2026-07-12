@@ -379,7 +379,7 @@ export default function MediaPage() {
         {social?.myItem ? (
           <div className="mb-3">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs px-3 py-1.5 rounded-full bg-accent text-background font-medium">
+              <span className="text-xs px-3 py-1.5 rounded-sm bg-accent text-background font-medium">
                 In your Trove, ranked #{social.myItem.rank}
               </span>
             </div>
@@ -395,7 +395,7 @@ export default function MediaPage() {
           </div>
         ) : social?.onToConsume ? (
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-xs px-3 py-1.5 rounded-full bg-surface-hover text-muted border border-border font-medium">
+            <span className="text-xs px-3 py-1.5 rounded-sm bg-surface-hover text-muted border border-border font-medium">
               On your Up Next list
             </span>
           </div>

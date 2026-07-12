@@ -292,13 +292,13 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
               editable && onReorder ? "cursor-grab active:cursor-grabbing" : ""
             } ${dragIndex === index ? "opacity-40 scale-95" : ""}`}
           >
-            <div className="absolute top-2 left-2 bg-accent text-background text-xs font-mono font-semibold w-6 h-6 rounded-full flex items-center justify-center z-10">
+            <div className="absolute top-2 left-2 bg-accent text-background text-xs font-mono font-semibold w-6 h-6 rounded-sm flex items-center justify-center z-10">
               {item.rank}
             </div>
             {editable && onDelete && (
               <button
                 onClick={(e) => { e.stopPropagation(); onDelete(item.id); }}
-                className="absolute top-2 right-2 bg-black/50 text-muted backdrop-blur-sm text-xs w-6 h-6 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-60 hover:!opacity-100 hover:bg-red-500/80 hover:text-white transition-all z-10"
+                className="absolute top-2 right-2 bg-black/50 text-muted backdrop-blur-sm text-xs w-6 h-6 rounded-sm flex items-center justify-center max-md:opacity-60 opacity-0 group-hover:opacity-60 hover:!opacity-100 hover:bg-red-500/80 hover:text-white transition-all z-10"
               >
                 &times;
               </button>
@@ -323,7 +323,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
               return (
                 <button
                   onClick={(e) => { e.stopPropagation(); onAdd(item); }}
-                  className="absolute top-2 right-2 text-xs font-medium px-2 py-1 rounded-lg z-10 transition-all bg-accent-muted text-accent hover:bg-accent hover:text-background opacity-0 group-hover:opacity-100"
+                  className="absolute top-2 right-2 text-xs font-medium px-2 py-1 rounded-lg z-10 transition-all bg-accent-muted text-accent hover:bg-accent hover:text-background max-md:opacity-100 opacity-0 group-hover:opacity-100"
                 >
                   + Up Next
                 </button>
@@ -352,7 +352,7 @@ export default function ItemGrid({ items, category, editable = false, onDelete, 
             </div>
             <div className="px-3 pb-3">
               {/* Action buttons - always visible on hover */}
-              <div className="flex gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex gap-1.5 max-md:opacity-100 opacity-0 group-hover:opacity-100 transition-opacity">
                 <button
                   onClick={(e) => { e.stopPropagation(); openRecommendModal(item); }}
                   className="flex-1 flex items-center justify-center gap-1.5 text-xs font-medium px-2 py-1.5 rounded-lg bg-accent-muted text-accent hover:bg-accent hover:text-background transition-all"

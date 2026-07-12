@@ -360,7 +360,7 @@ export default function ImportPage() {
   const unmatchedCount = rows.filter((r) => !r.match).length;
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-8">
+    <div className="max-w-4xl mx-auto px-4 md:px-6 py-6 md:py-8">
       <div className="flex items-center justify-between mb-6">
         <h1 className="font-serif text-2xl text-foreground">Import</h1>
         <Link href="/trove" className="text-sm text-muted hover:text-foreground transition-colors">

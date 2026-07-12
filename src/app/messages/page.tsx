@@ -47,7 +47,7 @@ export default function ConversationsPage() {
   if (loading || !user) return null;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
+    <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-8">
       <div className="bg-surface rounded-xl border border-border p-6 mb-6">
         <h1 className="font-serif text-2xl text-foreground">Messages</h1>
         <p className="text-sm text-muted mt-1">Your conversations about books, films, and shows</p>

@@ -200,7 +200,7 @@ function CompareContent() {
   const friendName = friend.displayName || friend.username;
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
+    <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-8">
       {/* Back link */}
       <a
         href="/social/people"
@@ -295,7 +295,7 @@ function CompareContent() {
                       </div>
                     </div>
                     {i === 0 && (
-                      <span className="px-3 py-1 bg-accent-muted text-accent text-xs font-medium rounded-full">
+                      <span className="px-3 py-1 bg-accent-muted text-accent text-xs font-medium rounded-sm">
                         Closest match
                       </span>
                     )}

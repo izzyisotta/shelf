@@ -208,7 +208,7 @@ export default function DiscoverPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
+    <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-8">
       {/* Toast */}
       {toast && (
         <div className="fixed top-4 right-4 z-50 bg-surface border border-border rounded-lg px-4 py-3 shadow-lg text-sm text-foreground">
@@ -310,14 +310,14 @@ export default function DiscoverPage() {
                           <button
                             onClick={() => savePickToTrove(pick)}
                             disabled={savingPick === pickKey + ":trove"}
-                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
+                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 max-md:opacity-100 opacity-0 group-hover:opacity-100"
                           >
                             + Trove
                           </button>
                           <button
                             onClick={() => savePickToUpNext(pick)}
                             disabled={savingPick === pickKey + ":upnext"}
-                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
+                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 max-md:opacity-100 opacity-0 group-hover:opacity-100"
                           >
                             + Up Next
                           </button>
@@ -421,14 +421,14 @@ export default function DiscoverPage() {
                           <button
                             onClick={() => saveActivityToTrove(item)}
                             disabled={savingActivity === actKey + ":trove"}
-                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
+                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 max-md:opacity-100 opacity-0 group-hover:opacity-100"
                           >
                             + Trove
                           </button>
                           <button
                             onClick={() => saveActivityToUpNext(item)}
                             disabled={savingActivity === actKey + ":upnext"}
-                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 opacity-0 group-hover:opacity-100"
+                            className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 max-md:opacity-100 opacity-0 group-hover:opacity-100"
                           >
                             + Up Next
                           </button>

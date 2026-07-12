@@ -160,7 +160,7 @@ export default function ToConsumePage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-8">
+    <div className="max-w-5xl mx-auto px-4 md:px-6 py-6 md:py-8">
       {/* Header */}
       <div className="bg-surface rounded-xl border border-border p-6 mb-6">
         <div className="flex items-center justify-between">
@@ -302,14 +302,14 @@ export default function ToConsumePage() {
                     ) : (
                       <button
                         onClick={() => startEditNotes(item)}
-                        className="text-xs text-muted-light hover:text-muted transition-colors opacity-0 group-hover:opacity-100"
+                        className="text-xs text-muted-light hover:text-muted transition-colors max-md:opacity-100 opacity-0 group-hover:opacity-100"
                       >
                         · + note
                       </button>
                     )}
                   </div>
                 </div>
-                <div className="flex gap-1 opacity-0 group-hover:opacity-100">
+                <div className="flex gap-1 max-md:opacity-100 opacity-0 group-hover:opacity-100">
                   {choosingTier === item.id ? (
                     <>
                       <span className="px-2 py-1.5 text-xs text-muted-light self-center">Rank it:</span>
