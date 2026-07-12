@@ -80,6 +80,10 @@ export default function LoginPage() {
           <Link href="/signup" className="text-accent hover:underline">
             Sign up
           </Link>
+          {" · "}
+          <Link href="/forgot-password" className="text-muted-light hover:text-foreground">
+            Forgot password?
+          </Link>
         </p>
       </div>
     </div>
