@@ -85,6 +85,16 @@ export default function ConsumedPage() {
             <h1 className="text-2xl font-mono font-semibold text-foreground">
               @{user.username}
             </h1>
+            <button
+              onClick={() => {
+                navigator.clipboard.writeText(`${window.location.origin}/join/${user.username}`);
+                setToast("Taste link copied - text it to a friend");
+                setTimeout(() => setToast(null), 3000);
+              }}
+              className="mt-2 text-xs font-medium uppercase tracking-widest text-accent hover:text-accent-hover transition-colors"
+            >
+              Share taste link
+            </button>
           </div>
           <div className="flex gap-6 text-center">
             {tabs.map((t) => (

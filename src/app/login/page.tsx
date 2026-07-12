@@ -33,7 +33,8 @@ export default function LoginPage() {
     }
 
     await refresh();
-    router.push("/trove");
+    const from = new URLSearchParams(window.location.search).get("from");
+    router.push(from ? `/join/${encodeURIComponent(from)}` : "/trove");
   }
 
   return (
