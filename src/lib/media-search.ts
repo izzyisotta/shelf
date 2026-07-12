@@ -67,3 +67,44 @@ export function searchByCategory(category: string, query: string): Promise<Media
   if (category === "tv") return searchTV(query);
   return Promise.resolve([]);
 }
+
+// Verify AI-generated picks against the real media databases: attach
+// external_id/cover for titles that exist, drop the ones that don't
+// (hallucination filter, E6). Mutation-free; returns a new array.
+export async function verifyPicks<T extends { title: string; creator?: string; category: string }>(
+  picks: T[]
+): Promise<(T & { externalId: string; coverUrl: string; year: string })[]> {
+  const verified: (T & { externalId: string; coverUrl: string; year: string })[] = [];
+  const BATCH = 5;
+  const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9 ]/g, "").replace(/\s+/g, " ").trim();
+
+  for (let i = 0; i < picks.length; i += BATCH) {
+    const batch = picks.slice(i, i + BATCH);
+    const results = await Promise.all(
+      batch.map(async (pick) => {
+        try {
+          const query =
+            pick.category === "book" && pick.creator ? `${pick.title} ${pick.creator}` : pick.title;
+          const hits = await searchByCategory(pick.category, query);
+          const best =
+            hits.find((h) => norm(h.title) === norm(pick.title)) ||
+            (hits[0] && norm(hits[0].title).includes(norm(pick.title)) ? hits[0] : null);
+          if (!best) return null;
+          return {
+            ...pick,
+            title: best.title,
+            creator: pick.creator || best.creator,
+            externalId: best.externalId,
+            coverUrl: best.coverUrl,
+            year: best.year,
+          };
+        } catch {
+          // Verification unavailable (API hiccup): keep the pick, unverified
+          return { ...pick, externalId: "", coverUrl: "", year: "" };
+        }
+      })
+    );
+    verified.push(...results.filter((r): r is NonNullable<typeof r> => r !== null));
+  }
+  return verified;
+}

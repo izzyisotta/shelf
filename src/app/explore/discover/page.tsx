@@ -11,6 +11,8 @@ interface Pick {
   creator: string;
   category: string;
   reason: string;
+  externalId?: string;
+  coverUrl?: string;
 }
 
 interface PersonalRec {
@@ -39,18 +41,23 @@ export default function DiscoverPage() {
   const [generating, setGenerating] = useState(false);
   const [loadingRec, setLoadingRec] = useState(true);
   const [activity, setActivity] = useState<ActivityItem[]>([]);
+  const [trending, setTrending] = useState<
+    { title: string; creator: string; category: string; coverUrl: string; externalId: string; count: number }[]
+  >([]);
   const [savingPick, setSavingPick] = useState<string | null>(null);
   const [savingActivity, setSavingActivity] = useState<string | null>(null);
   const library = useUserLibrary();
 
   const loadData = useCallback(async () => {
-    const [recRes, activityRes] = await Promise.all([
+    const [recRes, activityRes, trendingRes] = await Promise.all([
       fetch("/api/recommend/personal"),
       fetch("/api/friends/activity"),
+      fetch("/api/friends/trending"),
     ]);
-    const [recData, activityData] = await Promise.all([
+    const [recData, activityData, trendingData] = await Promise.all([
       recRes.json(),
       activityRes.json(),
+      trendingRes.json(),
     ]);
 
     if (recData.recommendation) {
@@ -58,6 +65,7 @@ export default function DiscoverPage() {
       setRecTimestamp(recData.created_at);
     }
     setActivity(activityData.activity || []);
+    setTrending(trendingData.trending || []);
     setLoadingRec(false);
   }, []);
 
@@ -284,13 +292,22 @@ export default function DiscoverPage() {
                 return (
                   <div
                     key={i}
-                    className="group flex items-center gap-4 py-3 px-3 rounded-lg hover:bg-surface-hover transition-colors"
+                    onClick={() => {
+                      if (pick.externalId) router.push(`/media/${pick.category}/${pick.externalId}`);
+                    }}
+                    className={`group flex items-center gap-4 py-3 px-3 rounded-lg hover:bg-surface-hover transition-colors ${
+                      pick.externalId ? "cursor-pointer" : ""
+                    }`}
                   >
-                    <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-muted flex items-center justify-center">
-                      <span className="text-accent text-xs font-bold uppercase">
-                        {categoryBadge(pick.category)}
-                      </span>
-                    </div>
+                    {pick.coverUrl ? (
+                      <img src={pick.coverUrl} alt="" className="flex-shrink-0 w-8 h-12 object-cover rounded-sm border border-border" />
+                    ) : (
+                      <div className="flex-shrink-0 w-8 h-8 rounded-lg bg-accent-muted flex items-center justify-center">
+                        <span className="text-accent text-xs font-bold uppercase">
+                          {categoryBadge(pick.category)}
+                        </span>
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
                       <div className="font-medium text-foreground text-sm">{pick.title}</div>
                       <div className="flex items-center gap-2 mt-0.5">
@@ -308,14 +325,14 @@ export default function DiscoverPage() {
                       ) : (
                         <>
                           <button
-                            onClick={() => savePickToTrove(pick)}
+                            onClick={(e) => { e.stopPropagation(); savePickToTrove(pick); }}
                             disabled={savingPick === pickKey + ":trove"}
                             className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 max-md:opacity-100 opacity-0 group-hover:opacity-100"
                           >
                             + Trove
                           </button>
                           <button
-                            onClick={() => savePickToUpNext(pick)}
+                            onClick={(e) => { e.stopPropagation(); savePickToUpNext(pick); }}
                             disabled={savingPick === pickKey + ":upnext"}
                             className="px-3 py-1.5 text-xs text-accent hover:bg-accent hover:text-background rounded-lg transition-colors border border-accent/30 max-md:opacity-100 opacity-0 group-hover:opacity-100"
                           >
@@ -340,6 +357,40 @@ export default function DiscoverPage() {
           </div>
         )}
       </div>
+
+      {/* Trending in your circle */}
+      {trending.length > 0 && (
+        <div className="mb-6">
+          <h2 className="text-sm font-medium text-muted uppercase tracking-wide mb-3">
+            Trending in your circle
+          </h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {trending.map((t, i) => (
+              <div
+                key={i}
+                onClick={() => {
+                  if (t.externalId) router.push(`/media/${t.category}/${t.externalId}`);
+                }}
+                className={`bg-surface rounded-xl border border-border p-3 flex items-center gap-3 hover:border-accent/30 transition-colors ${
+                  t.externalId ? "cursor-pointer" : ""
+                }`}
+              >
+                {t.coverUrl ? (
+                  <img src={t.coverUrl} alt="" className="w-10 h-14 object-cover rounded-sm border border-border flex-shrink-0" />
+                ) : (
+                  <div className="w-10 h-14 bg-surface-hover rounded-sm flex-shrink-0" />
+                )}
+                <div className="min-w-0">
+                  <div className="text-sm text-foreground truncate">{t.title}</div>
+                  <div className="text-xs text-muted-light mt-0.5">
+                    <span className="font-mono text-accent">{t.count}</span> friends added this
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Friends' Activity */}
       <div className="mb-6">

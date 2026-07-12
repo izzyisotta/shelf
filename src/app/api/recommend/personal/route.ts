@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
+import { verifyPicks } from "@/lib/media-search";
 
 export async function GET() {
   const supabase = await createClient();
@@ -98,6 +99,12 @@ Return 3-4 picks for EACH category the person has ranked items in (book/film/tv)
       recommendation = JSON.parse(text);
     } catch {
       recommendation = { taste_profile: text, picks: [] };
+    }
+
+    // E6: verify picks against real media databases - hallucinated titles
+    // are dropped, real ones gain external_id + cover (clickable in the UI)
+    if (Array.isArray(recommendation.picks) && recommendation.picks.length > 0) {
+      recommendation.picks = await verifyPicks(recommendation.picks);
     }
 
     // Upsert to database

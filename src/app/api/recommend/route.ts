@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase-server";
+import { verifyPicks } from "@/lib/media-search";
 
 export async function GET(req: NextRequest) {
   const supabase = await createClient();
@@ -99,6 +100,12 @@ Return 3-5 items in from_their_list and 3-5 in new_picks, spread across the cate
       recommendation = JSON.parse(text);
     } catch {
       recommendation = { vibe: text, common_ground: [], differences: [], from_their_list: [], new_picks: [] };
+    }
+
+    // E6: verify new_picks against real media databases (from_their_list
+    // items come from the friend's actual shelf, so they're already real)
+    if (Array.isArray(recommendation.new_picks) && recommendation.new_picks.length > 0) {
+      recommendation.new_picks = await verifyPicks(recommendation.new_picks);
     }
 
     // Save to database (upsert)
